@@ -1,220 +1,285 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
-import axios from "axios"
 import "leaflet/dist/leaflet.css";
 import "./App.css";
+import icon_red from "./assets/red-marker.webp";
+import GetCurrentPos from "./Current_pos";
+const FACILITIES_URL="https://professor-panic.github.io/uzima_json/healthcare_facilities.json"
+const redIcon = L.icon({
+    iconUrl: icon_red,
+    iconSize: [20, 35],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34]
+});
 
-const OVERPASS_ENDPOINTS = [
-    "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
-    
-];
+function normalizeFacility(feature) {
+    if (!feature) return null;
+    const properties = feature.properties ?? {};
+    const coordinates = feature.geometry?.coordinates ?? [];
+    const longitude = Number(
+        coordinates[0] ?? properties.Longitude
+    );
+    const latitude = Number(
+        coordinates[1] ?? properties.Latitude
+    );
+    if (!Number.isFinite(latitude) ||!Number.isFinite(longitude)) {
+        return null;
+    }
+
+    return {
+        key: String(
+            feature.id ??
+            properties.OBJECTID ??
+            properties.FID ??
+            `${latitude}/${longitude}`
+        ),
+        lat: latitude,
+        lon: longitude,
+        name:properties.Facility_N?.trim() ||"Unnamed facility",
+        facilityType:properties.Type?.trim() ||"Healthcare facility",
+        owner:properties.Owner?.trim() ||"Unknown",
+        county:properties.County?.trim() ||"Unknown",
+        subCounty:properties.Sub_County?.trim() ||"Unknown",
+        nearestTo:properties.Nearest_To?.trim() ||""
+    };
+}
+
+function isWithinBounds(bounds, facility) {
+    return (
+        facility.lat >= bounds.getSouth() &&
+        facility.lat <= bounds.getNorth() &&
+        facility.lon >= bounds.getWest() &&
+        facility.lon <= bounds.getEast()
+    );
+}
+
+function renderFacilitiesInView(map,facilityLayer,facilities) {
+    facilityLayer.clearLayers();
+    //Check if the facilites are empty
+    if (!facilities.length) return;
+
+    const bounds = map.getBounds();
+    //if it isn't empty
+    //Draw all facilitie in the vieq
+    for (const facility of facilities) {
+        if (!isWithinBounds(bounds, facility)) {
+            continue;
+        }
+
+        L.marker(
+            [facility.lat, facility.lon],
+            { icon: redIcon }
+        )
+        .bindPopup(
+            `
+            <strong>${escapeHtml(facility.name)}</strong><br>
+            ${escapeHtml(facility.facilityType)}<br>
+            ${escapeHtml(facility.county)}
+            `
+        )
+        .addTo(facilityLayer);
+    }
+}
 
 export function ShowMap() {
     const mapElementRef = useRef(null);
+    const mapRef = useRef(null);
+    const facilityLayerRef = useRef(null);
+    const currentMarkerRef = useRef(null);
+    const facilitiesRef = useRef([]);
 
+    const [facilities, setFacilities] = useState([]);
+    const [hospDistances, setHospDistances] = useState([]);
+    const [loadError, setLoadError] = useState("");
+
+    const cur_pos = GetCurrentPos();
+    //at the start create the map
     useEffect(() => {
         if (!mapElementRef.current) {
-            return undefined;
+            return;
         }
-
         const map = L.map(mapElementRef.current).setView(
             [-1.28333, 36.81667],
-            13
+            16
         );
-
+        mapRef.current = map;
         L.tileLayer(
             "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
             {
-                maxZoom: 19,
-                attribution: "&copy; OpenStreetMap contributors"
+                maxZoom: 18,
+                minZoom: 15,
+                attribution:
+                    "&copy; OpenStreetMap contributors"
             }
         ).addTo(map);
 
-        const facilityLayer = L.layerGroup().addTo(map);
+        const facilityLayer =L.layerGroup().addTo(map);
+        facilityLayerRef.current =facilityLayer;
 
-        let requestController = null;
-        let refreshTimer = null;
+        function refreshVisibleMarkers() {
+            renderFacilitiesInView(map,facilityLayer,facilitiesRef.current);
+        }
 
-        async function refreshFacilities() {
-            // Cancel the previous request if the user moved the map again.
-            requestController?.abort();
-            requestController = new AbortController();
+        map.on("moveend",refreshVisibleMarkers);
+        return () => {
+            map.off("moveend",refreshVisibleMarkers);
+            map.remove();
 
+            mapRef.current = null;
+            facilityLayerRef.current = null;
+            currentMarkerRef.current = null;
+        };
+    }, []);
+    useEffect(() => {
+        const controller =new AbortController();
+        async function loadFacilities() {
             try {
-                const facilities = await getFacilities(
-                    map,
-                    requestController.signal
+                setLoadError("");
+                const response = await fetch(
+                    FACILITIES_URL,
+                    {
+                        signal: controller.signal
+                    }
                 );
 
-                facilityLayer.clearLayers();
-
-                const addedFacilities = new Set();
-
-                for (const facility of facilities) {
-                    const key = `${facility.type}/${facility.id}`;
-
-                    // Prevent the same OSM object from being added twice.
-                    if (addedFacilities.has(key)) {
-                        continue;
-                    }
-
-                    addedFacilities.add(key);
-
-                    const latitude =
-                        facility.lat ?? facility.center?.lat;
-
-                    const longitude =
-                        facility.lon ?? facility.center?.lon;
-
-                    if (
-                        latitude === undefined ||
-                        longitude === undefined
-                    ) {
-                        continue;
-                    }
-
-                    const tags = facility.tags ?? {};
-                    const name = tags.name ?? "Unnamed facility";
-                    const facilityType = getFacilityType(tags);
-
-                    L.marker([latitude, longitude])
-                        .bindPopup(`
-                            <strong>${escapeHtml(name)}</strong>
-                            <br>
-                            ${escapeHtml(facilityType)}
-                        `)
-                        .addTo(facilityLayer);
+                if (!response.ok) {
+                    throw new Error(`Failed to load facilities JSON: ${response.status} ${response.statusText}`);
                 }
 
-                console.log(
-                    `Displayed ${addedFacilities.size} facilities`
-                );
-            } catch (error) {
-                if (axios.isCancel(error) ||error.code === "ERR_CANCELED") {
+                const data =await response.json();
+
+                if (data?.type !== "FeatureCollection" ||!Array.isArray(data.features)) {
+                    throw new Error(
+                        "Facility JSON is not a valid GeoJSON FeatureCollection"
+                    );
+                }
+
+                const normalized =data.features.map(normalizeFacility).filter(Boolean);
+                facilitiesRef.current =normalized;
+                setFacilities(normalized);
+
+                if (mapRef.current &&facilityLayerRef.current) {
+                    renderFacilitiesInView(
+                        mapRef.current,
+                        facilityLayerRef.current,
+                        normalized
+                    );
+                }
+
+                console.log(`Loaded ${normalized.length} healthcare facilities from JSON`);
+            }
+            catch (error) {
+                if (error.name === "AbortError") {
                     return;
                 }
-                console.error("Facility request failed:", error);
+
+                console.error("Failed to load healthcare facilities:",error);
+
+                setLoadError(error.message);
             }
         }
 
-        function scheduleRefresh() {
-            // Wait briefly in case several map events happen together.
-            clearTimeout(refreshTimer);
-
-            refreshTimer = setTimeout(() => {
-                refreshFacilities();
-            }, 1000);
-        }
-
-        refreshFacilities();
-
-        // Refresh after the user finishes panning or zooming.
-        map.on("moveend", scheduleRefresh);
+        loadFacilities();
 
         return () => {
-            clearTimeout(refreshTimer);
-            requestController?.abort();
-            map.off("moveend", scheduleRefresh);
-            map.remove();
+            controller.abort();
         };
     }, []);
 
-    return <div ref={mapElementRef} id="map" />;
-}
-export async function getFacilities(map, signal) {
-    const bounds = map.getBounds();
-
-    const bbox = [
-        bounds.getSouth(),
-        bounds.getWest(),
-        bounds.getNorth(),
-        bounds.getEast()
-    ].join(",");
-
-    const query = `
-        [out:json][timeout:60];
-
-        (
-            nwr["amenity"="hospital"](${bbox});
-            nwr["healthcare"="hospital"](${bbox});
-            nwr["healthcare"="counselling"](${bbox});
-            nwr["healthcare"="psychotherapist"](${bbox});
-        );
-
-        out center tags;
-    `;
-
-    let lastError = null;
-
-    for (const endpoint of OVERPASS_ENDPOINTS) {
-        try {
-            console.log(`Trying Overpass endpoint: ${endpoint}`);
-
-            const response = await axios.post(
-                endpoint,
-                new URLSearchParams({
-                    data: query
-                }),
-                {
-                    headers: {
-                        "Content-Type":
-                            "application/x-www-form-urlencoded"
-                    },
-                    timeout: 15000,
-                    signal
-                }
-            );
-
-            console.log("Overpass response:", response.data);
-
-            return response.data.elements ?? [];
-        } catch (error) {
-            if (
-                axios.isCancel(error) ||
-                error.code === "ERR_CANCELED"
-            ) {
-                throw error;
-            }
-
-            console.warn(
-                `Overpass endpoint failed: ${endpoint}`,
-                {
-                    message: error.message,
-                    status: error.response?.status,
-                    response: error.response?.data
-                }
-            );
-
-            lastError = error;
+    useEffect(() => {
+        if (!cur_pos ||!mapRef.current) {
+            return;
         }
-    }
 
-    throw lastError ?? new Error(
-        "All Overpass endpoints failed"
+        if (currentMarkerRef.current) {
+            currentMarkerRef.current.setLatLng(cur_pos);
+            return;
+        }
+
+        currentMarkerRef.current =L.marker(cur_pos,
+                {
+                    radius: 8,
+                    weight: 3,
+                    fillOpacity: 1
+                }
+            )
+            .bindPopup("<strong>Current Position</strong>")
+            .addTo(mapRef.current);
+        //Every time the current position changes,change the view
+        mapRef.current.setView(cur_pos);
+    }, [cur_pos]);
+    //Now if there are available facililites and the curent position isn't null
+    //calculate the distances
+    useEffect(() => {
+        if (!cur_pos ||facilities.length === 0) {
+            setHospDistances([]);
+            return;
+        }
+        //Find all distances then sort them according to proximity of the user
+        const distances =facilities.map(facility => ({
+                ...facility,
+                distanceKm: haversine(cur_pos[0],cur_pos[1],facility.lat,facility.lon)
+            }))
+            .sort((a, b) =>a.distanceKm -b.distanceKm);
+
+        setHospDistances(distances);
+        if (distances.length) {
+            console.log("Closest facility:",distances[0].name);
+            console.log(`Closest distance: ${distances[0].distanceKm.toFixed(2)} km`);
+        }
+    }, [cur_pos, facilities]);
+
+    return (
+        <>
+            <div
+                ref={mapElementRef}
+                id="map"
+            />
+
+            {loadError && (
+                <p className="facility-load-error">
+                    {loadError}
+                </p>
+            )}
+
+            <ul className="hos-distances-list">
+                {hospDistances.filter(facility =>facility.distanceKm < 1.0)
+                    .map(
+                        facility => (
+                            <li key={facility.key}className="hos-distances">
+                                <p>{facility.name}</p>
+                                <p>{facility.facilityType}</p>
+                                <p>{facility.distanceKm.toFixed(2)} km</p>
+                            </li>
+                        )
+                    )}
+            </ul>
+        </>
     );
-}
-function getFacilityType(tags) {
-    if (
-        tags.amenity === "hospital" ||
-        tags.healthcare === "hospital"
-    ) {
-        return "Hospital";
-    }
-
-    if (tags.healthcare === "counselling") {
-        return "Counselling centre";
-    }
-
-    if (tags.healthcare === "psychotherapist") {
-        return "Psychotherapist";
-    }
-
-    return "Healthcare facility";
 }
 
 function escapeHtml(value) {
-    const element = document.createElement("div");
-    element.textContent = String(value);
-
+    const element =document.createElement("div");
+    element.textContent =String(value);
     return element.innerHTML;
+}
+//I use this to calculate the straight line distances from where I am to the hopitals
+//though this can be improved to follor road distances its too complex for the project
+export function haversine(lat1,lon1,lat2,lon2) {
+    const dLat =(lat2 - lat1) *Math.PI /180;
+
+    const dLon =(lon2 - lon1) *Math.PI /180;
+
+    lat1 =lat1 *Math.PI /180;
+
+    lat2 =lat2 *Math.PI /180;
+
+    const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.sin(dLon / 2) ** 2 *
+        Math.cos(lat1) *
+        Math.cos(lat2);
+
+    const c =2 *Math.asin(Math.sqrt(a));
+    return 6371 * c;
 }

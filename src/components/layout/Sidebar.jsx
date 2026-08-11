@@ -16,7 +16,6 @@ const menuItems = [
     { icon: MapPin, label: "Service Map", to: "/service-map" },
     { icon: Calendar, label: "Appointments", to: "/appointments" },
     { icon: Pill, label: "Medications", to: "/medications" },
-    { icon: HelpCircle, label: "Support", to: "/support" },
 ];
 
 export default function Sidebar() {

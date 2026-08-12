@@ -20,6 +20,8 @@ import MedicationRow from "../Medication/MedicationRow";
 import AddMedicationForm from "../Medication/AddMedicationForm";
 import LowStockAlert from "../Medication/LowStockAlert";
 
+import Modal from "./Modal";
+
 const MOCK_USER_ID = "user_123";
 
 function AppointmentPage() {
@@ -92,9 +94,13 @@ function AppointmentPage() {
                <AppointmentCalendar />
             </div>
 
-            {showAppointmentForm && (
+            {/* //Make the form pop up */}
+            <Modal
+               isOpen={showAppointmentForm}
+               onClose={() => setShowAppointmentForm(false)}
+            >
                <AddAppointmentForm onAdd={handleAddAppointment} />
-            )}
+            </Modal>
 
             <div>
                {/* Appointment List */}
@@ -124,9 +130,13 @@ function AppointmentPage() {
                </button>
             </div>
 
-            {showMedicationForm && (
+            {/* //Make the form pop up */}
+            <Modal
+               isOpen={showMedicationForm}
+               onClose={() => setShowMedicationForm(false)}
+            >
                <AddMedicationForm onAdd={handleAddMedication} />
-            )}
+            </Modal>
 
             {/* Morning */}
             <div className="meds-card">

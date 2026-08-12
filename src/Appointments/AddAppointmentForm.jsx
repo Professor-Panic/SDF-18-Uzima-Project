@@ -30,11 +30,11 @@ export default function AddAppointmentForm({ onAdd }) {
    //The form
    return (
       <div>
-         <form onSubmit={handleSubmit}>
+         <form className="styled-form" onSubmit={handleSubmit}>
             <h3>Add an appointment</h3>
             {/* clinicNameManual */}
-            <label>
-               Clinic / Provider name
+            <label className="form-field">
+               <span>Clinic / Provider name</span>
                <input
                   type="text"
                   value={clinicNameManual}
@@ -44,8 +44,8 @@ export default function AddAppointmentForm({ onAdd }) {
                />
             </label>
             {/* Date & Time */}
-            <label>
-               Date & Time
+            <label className="form-field">
+               <span>Date & Time</span>
                <input
                   type="datetime-local" //a built-in HTML input type that gives the user a native date-and-time picker widget
                   value={dateTime}
@@ -54,15 +54,19 @@ export default function AddAppointmentForm({ onAdd }) {
                />
             </label>
             {/* Reason */}
-            <label>
-               Reason
+            <label className="form-field">
+               <span>Reason</span>
                <input
                   type="text"
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
                />
             </label>
-            <button type="submit" disabled={submitting}>
+            <button
+               className="appointment-btn appointment-btn--primary"
+               type="submit"
+               disabled={submitting}
+            >
                {/* //preventing a double-submit if someone clicks twice quickly. */}
                {submitting ? "Adding..." : "Add appointment"}
             </button>

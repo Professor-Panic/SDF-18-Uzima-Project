@@ -44,11 +44,11 @@ export default function AddMedicationForm({ onAdd }) {
    }
 
    return (
-      <form onSubmit={handleSubmit}>
+      <form className="styled-form" onSubmit={handleSubmit}>
          <h3>Add a medication</h3>
 
-         <label>
-            Name
+         <label className="form-field">
+            <span>Name</span>
             <input
                type="text"
                value={name}
@@ -58,8 +58,8 @@ export default function AddMedicationForm({ onAdd }) {
             />
          </label>
 
-         <label>
-            Dosage
+         <label className="form-field">
+            <span>Dosage</span>
             <input
                type="text"
                value={dosage}
@@ -69,8 +69,8 @@ export default function AddMedicationForm({ onAdd }) {
             />
          </label>
 
-         <label>
-            Quantity per dose
+         <label className="form-field">
+            <span>Quantity per dose</span>
             <input
                type="text"
                value={quantityPerDose}
@@ -79,8 +79,8 @@ export default function AddMedicationForm({ onAdd }) {
             />
          </label>
 
-         <label>
-            Scheduled time
+         <label className="form-field">
+            <span>Scheduled time</span>
             <input
                type="time"
                value={scheduledTime}
@@ -89,8 +89,8 @@ export default function AddMedicationForm({ onAdd }) {
             />
          </label>
 
-         <label>
-            Quantity remaining
+         <label className="form-field">
+            <span>Quantity remaining</span>
             <input
                type="number"
                value={quantityRemaining}
@@ -99,7 +99,11 @@ export default function AddMedicationForm({ onAdd }) {
             />
          </label>
 
-         <button type="submit" disabled={submitting}>
+         <button
+            className="appointment-btn appointment-btn--primary"
+            type="submit"
+            disabled={submitting}
+         >
             {submitting ? "Adding..." : "Add medication"}
          </button>
       </form>

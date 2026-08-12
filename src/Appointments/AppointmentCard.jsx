@@ -1,4 +1,4 @@
-import AppointmentStatusBadge from "./AppointmentStatusBadge";
+// import AppointmentStatusBadge from "./AppointmentStatusBadge";
 
 function formatDateTime(isoString) {
    const date = new Date(isoString);
@@ -35,11 +35,15 @@ function AppointmentCard({ appointment, onUpdateStatus }) {
    }
 
    return (
-      <div>
+      <div className="appointment-card">
          <h3>{appointment.clinicNameManual}</h3>
          <p>{appointment.reason}</p>
          <p>{formatDateTime(appointment.dateTime)}</p>
-         <AppointmentStatusBadge status={appointment.status} />
+         <span
+            className={`appointment-status appointment-status--${appointment.status}`}
+         >
+            {appointment.status}
+         </span>
 
          {confirmationPrompt}
       </div>

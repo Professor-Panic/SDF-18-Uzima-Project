@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 // import "./Map/index.css";
 
 import AppointmentPage from "./Appointments/AppointmentsPage";
+import "./Appointments/appointmentPageStyles.css";
 
 createRoot(document.getElementById("root")).render(
    <StrictMode>

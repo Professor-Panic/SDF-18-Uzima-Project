@@ -86,8 +86,8 @@ export default function AppointmentCalendar() {
                <svg
                   width="16"
                   height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
+                  // viewBox="0 0 24 24"
+                  // fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
                >
@@ -99,8 +99,8 @@ export default function AppointmentCalendar() {
                <svg
                   width="16"
                   height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
+                  // viewBox="0 0 24 24"
+                  // fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
                >
@@ -143,8 +143,13 @@ export default function AppointmentCalendar() {
                      borderRadius: "50%",
                      cursor: day ? "pointer" : "default", //real day cells show a clickable-looking cursor on hover
                      backgroundColor:
-                        day === selectedDate ? "#12386E" : "transparent",
-                     color: day === selectedDate ? "#fff" : "#033023",
+                        day !== null && day === selectedDate
+                           ? "#12386E"
+                           : "transparent",
+                     color:
+                        day !== null && day === selectedDate
+                           ? "#fff"
+                           : "#023326",
                   }}
                >
                   {day}

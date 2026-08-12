@@ -18,7 +18,7 @@ import {
 } from "../Medication/medicationsService";
 import MedicationRow from "../Medication/MedicationRow";
 import AddMedicationForm from "../Medication/AddMedicationForm";
-// import LowStockAlert from "../Medication/LowStockAlert";
+import LowStockAlert from "../Medication/LowStockAlert";
 
 const MOCK_USER_ID = "user_123";
 
@@ -75,25 +75,20 @@ function AppointmentPage() {
 
    return (
       //Main div
-      <div style={{ display: "flex", gap: "24px", padding: "24px" }}>
+      <div className="appointment-page">
          {/* Below the Navbar on the left*/}
-         <div style={{ flex: 2 }}>
-            <div
-               style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-               }}
-            >
+         <div className="appointment-column">
+            <div className="appointment-column__header">
                <h3>Upcoming Appointments</h3>
                <button
+                  className="appointment-btn appointment-btn--primary"
                   onClick={() => setShowAppointmentForm(!showAppointmentForm)}
                >
                   + Book Visit
                </button>
             </div>
 
-            <div>
+            <div className="calendar-card">
                <AppointmentCalendar />
             </div>
 
@@ -118,16 +113,11 @@ function AppointmentPage() {
          </div>
 
          {/* Below the Navbar on the right*/}
-         <div style={{ flex: 1 }}>
-            <div
-               style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-               }}
-            >
+         <div className="appointment-column">
+            <div className="appointment-column__header">
                <h3>Today's Meds</h3>
                <button
+                  className="appointment-btn appointment-btn--outline"
                   onClick={() => setShowMedicationForm(!showMedicationForm)}
                >
                   + Add Rx
@@ -139,7 +129,7 @@ function AppointmentPage() {
             )}
 
             {/* Morning */}
-            <div>
+            <div className="meds-card">
                <h4>Morning</h4>
                {morningMeds.length === 0 ? (
                   <p>Nothing scheduled.</p>
@@ -155,7 +145,7 @@ function AppointmentPage() {
             </div>
 
             {/* Evening */}
-            <div>
+            <div className="meds-card">
                <h4>Evening</h4>
                {eveningMeds.length === 0 ? (
                   <p>Nothing scheduled.</p>
@@ -171,10 +161,10 @@ function AppointmentPage() {
             </div>
 
             {/* Notification that meds are running low */}
-            {/* <LowStockAlert
+            <LowStockAlert
                medications={medications}
                onRequestRefill={(id) => alert(`Refill requested for ${id}`)}
-            /> */}
+            />
          </div>
       </div>
    );

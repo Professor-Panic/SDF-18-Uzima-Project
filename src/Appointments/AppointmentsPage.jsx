@@ -28,6 +28,7 @@ function AppointmentPage() {
    const [appointments, setAppointments] = useState([]);
    const [medications, setMedications] = useState([]);
    const [loading, setLoading] = useState(true);
+   const [toggleError, setToggleError] = useState(null);
 
    // Controls whether the "Book Visit" / "Add Rx" forms are shown
    const [showAppointmentForm, setShowAppointmentForm] = useState(false);
@@ -66,8 +67,20 @@ function AppointmentPage() {
    }
 
    async function handleToggleTaken(id) {
-      await toggleMedicationTaken(id);
-      await loadAll();
+      setMedications((prev) =>
+         prev.map((m) => (m.id === id ? { ...m, taken: !m.taken } : m))
+      );
+
+      try {
+         await toggleMedicationTaken(id);
+         setToggleError(null);
+      } catch (error) {
+         console.error("Failed to toggle medication:", error);
+         setMedications((prev)=>
+            prev.map((m) => (m.id === id ? { ...m, taken: !m.taken }:m))
+         )
+         setToggleError("Couldn't save that change. Try again."); 
+      }
    }
 
    const morningMeds = medications.filter((m) => m.timeLabel === "Morning");
@@ -169,6 +182,8 @@ function AppointmentPage() {
                   ))
                )}
             </div>
+
+            {toggleError && <p className="error-text">{toggleError}</p>}
 
             {/* Notification that meds are running low */}
             <LowStockAlert

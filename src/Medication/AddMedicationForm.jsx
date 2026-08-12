@@ -1,8 +1,11 @@
 import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 // Decides whether a given 24-hour time string counts as "Morning" or "Evening".
 function deriveTimeLabel(scheduledTime) {
-   const hour = parseInt(scheduledTime.split(":")[0], 10); //split time into an array, grabs just the first piece, the hour, converts that string into an actual number
+   // const hour = parseInt(scheduledTime.split(":")[0], 10); //split time into an array, grabs just the first piece, the hour, converts that string into an actual number
+   const hour = scheduledTime.getHours(); // now a Date, so .getHours() directly — no string-splitting needed
    return hour < 12 ? "Morning" : "Evening"; // <Familiar ternary>. Anything before noon (hour 12) counts as Morning, everything else Evening
 }
 
@@ -10,9 +13,9 @@ export default function AddMedicationForm({ onAdd }) {
    const [name, setName] = useState("");
    const [dosage, setDosage] = useState("");
    const [quantityPerDose, setQuantityPerDose] = useState("");
-   const [scheduledTime, setScheduledTime] = useState("");
+   const [scheduledTime, setScheduledTime] = useState(null);
    const [quantityRemaining, setQuantityRemaining] = useState("");
-   const [submitting, setSubmitting] = useState("");
+   const [submitting, setSubmitting] = useState(false);
 
    async function handleSubmit(e) {
       e.preventDefault();
@@ -34,7 +37,7 @@ export default function AddMedicationForm({ onAdd }) {
          setName("");
          setDosage("");
          setQuantityPerDose("");
-         setScheduledTime("");
+         setScheduledTime(null);
          setQuantityRemaining("");
       } catch (error) {
          console.error("Failed to add medication:", error);
@@ -79,15 +82,20 @@ export default function AddMedicationForm({ onAdd }) {
             />
          </label>
 
-         <label className="form-field">
+         <div className="form-field">
             <span>Scheduled time</span>
-            <input
-               type="time"
-               value={scheduledTime}
-               onChange={(e) => setScheduledTime(e.target.value)}
+            <DatePicker
+               selected={scheduledTime}
+               onChange={(time) => setScheduledTime(time)}
+               showTimeSelect
+               showTimeSelectOnly //hides the calendar grid entirely and shows only the scrolling time list.
+               timeIntervals={15}
+               dateFormat="h:mm aa"
+               placeholderText="Select time"
+               className="datetime-trigger"
                required
             />
-         </label>
+         </div>
 
          <label className="form-field">
             <span>Quantity remaining</span>

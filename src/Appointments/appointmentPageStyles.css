@@ -115,6 +115,57 @@
    color: #11211d;
 }
 
+/* The popover calendar itself */
+.datetime-trigger {
+   width: 100%;
+   box-sizing: border-box; /* so padding doesn't push it past 100% */
+   padding: 0.7rem 0.85rem;
+   border-radius: 0.7rem;
+   border: 1px solid rgba(148, 163, 184, 0.3);
+   background: #f8fbfd;
+   font-size: 0.92rem;
+}
+
+.datetime-trigger:focus {
+   outline: none;
+   border-color: #0f7a65;
+   box-shadow: 0 0 0 3px rgba(15, 122, 101, 0.14);
+}
+
+.react-datepicker {
+   font-family: inherit;
+   border: 1px solid rgba(148, 163, 184, 0.3);
+   border-radius: 1rem;
+   box-shadow: 0 20px 45px rgba(15, 23, 42, 0.18);
+}
+
+/* Month/year header bar */
+.react-datepicker__header,
+.react-datepicker__navigation {
+   background: transparent;
+   border-bottom: none;
+   padding-top: 1.5rem;
+   padding-bottom: 2rem;
+}
+
+/* Selected day */
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+   background: #0f7a65 !important;
+   border-radius: 50%;
+}
+
+/* Hover on any day */
+.react-datepicker__day:hover {
+   background: rgba(15, 122, 101, 0.1);
+   border-radius: 50%;
+}
+
+/* Time list — the selected time slot */
+.react-datepicker__time-list-item--selected {
+   background: #0f7a65 !important;
+}
+
 /* ============ Classy form styling ============ */
 
 .styled-form h3 {
@@ -164,13 +215,108 @@
 
 /* ---- Calendar ---- */
 .calendar-card {
-   padding: 1.1rem;
+   padding: 1.5rem 1.1rem 1.1rem;
    border-radius: 1.4rem;
    background: rgba(255, 255, 255, 0.72);
    border: 1px solid rgba(148, 163, 184, 0.14);
    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
    backdrop-filter: blur(18px);
    margin-bottom: 1rem;
+}
+/* ============ Main inline calendar (top-left widget) ============ */
+
+/* 1. Fill the full width of its column, instead of the library's fixed px width */
+.main-calendar {
+   width: 100% !important;
+   font-size: 1rem;
+}
+.main-calendar .react-datepicker__month-container {
+   width: 100%;
+   float: none;
+}
+.main-calendar .react-datepicker__month {
+   margin: 0; /* remove default month-block margin, tightens overall height */
+}
+.main-calendar .react-datepicker__day-names,
+.main-calendar .react-datepicker__week {
+   display: flex;
+   justify-content: space-between;
+}
+.main-calendar .react-datepicker__week {
+   margin-bottom: 0.15rem; /* explicit, tighter row gap instead of relying on cell line-height */
+}
+.main-calendar .react-datepicker__day-name,
+.main-calendar .react-datepicker__day {
+   width: 14.28%;
+   margin: 0;
+   line-height: normal;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+/* Weekday header labels: smaller, muted, letter-spaced — a label, not a heading */
+.main-calendar .react-datepicker__day-name {
+   font-size: 0.72rem;
+   font-weight: 600;
+   color: #94a3b8;
+   text-transform: uppercase;
+   letter-spacing: 0.04em;
+}
+
+/* Cap the circle to a fixed size and center it within its (much wider) grid cell,
+   so the circle doesn't stretch to fill the column as the calendar grows */
+.main-calendar .react-datepicker__day {
+   aspect-ratio: 1 / 1;
+   font-size: 0.85rem;
+   max-width: 2.2rem;
+   max-height: 2.2rem;
+   margin: 0 auto;
+   border-radius: 50%;
+}
+
+/* Header row (‹ month year ›): flush on the card, no background bar, tighter spacing */
+.main-calendar .react-datepicker__header,
+.main-calendar .react-datepicker__navigation {
+   background: transparent;
+   border-bottom: none;
+   padding-top: 1.5rem;
+   padding-bottom: 2rem;
+}
+
+.main-calendar .react-datepicker__current-month {
+   font-size: 0.95rem;
+   margin-bottom: 0.5rem;
+}
+
+/* 2 & 3. Today = filled, always on. Selected = outline only, doesn't persist filled */
+.main-calendar .react-datepicker__day--today {
+   background: #047546;
+   color: #fff;
+   border-radius: 50%;
+   font-weight: 700;
+}
+.main-calendar .react-datepicker__day--selected,
+.main-calendar .react-datepicker__day--keyboard-selected {
+   background: transparent !important;
+   border: 2px solid #047546;
+   border-radius: 50%;
+   color: #047546 !important;
+   font-weight: 700;
+}
+/* If you click today itself, let the filled "today" look win over the outline */
+.main-calendar .react-datepicker__day--today.react-datepicker__day--selected,
+.main-calendar
+   .react-datepicker__day--today.react-datepicker__day--keyboard-selected {
+   background: #047546 !important;
+   border: none;
+   color: #fff !important;
+}
+
+/* 4. Hide the previous/next month's overflow days but keep grid alignment */
+.main-calendar .react-datepicker__day--outside-month {
+   visibility: hidden;
+   pointer-events: none;
 }
 
 /* ---- Appointment cards ---- */
@@ -240,10 +386,31 @@
 }
 
 .med-row__checkbox {
+   appearance: none;
+   -webkit-appearance: none;
    width: 20px;
    height: 20px;
-   accent-color: #0f7a65;
-   border-radius: 30rem;
+   border-radius: 50%;
+   border: 2px solid #0f7a51;
+   cursor: pointer;
+   display: inline-block;
+   position: relative;
+}
+
+.med-row__checkbox:checked {
+   background-color: #0f7a51;
+}
+
+.med-row__checkbox:checked::after {
+   content: "";
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   width: 5px;
+   height: 9px;
+   border: solid white;
+   border-width: 0 2px 2px 0;
+   transform: translate(-50%, -60%) rotate(45deg);
 }
 
 /* ---- Low stock alert ---- */

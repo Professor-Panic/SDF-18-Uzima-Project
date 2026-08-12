@@ -1,9 +1,11 @@
 import { useState } from "react";
+import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 
 // Form for logging a new appointment.
 export default function AddAppointmentForm({ onAdd }) {
    const [clinicNameManual, setClinicNameManual] = useState("");
-   const [dateTime, setDateTime] = useState("");
+   const [dateTime, setDateTime] = useState(null);
    const [reason, setReason] = useState("");
    const [submitting, setSubmitting] = useState(false);
 
@@ -44,15 +46,19 @@ export default function AddAppointmentForm({ onAdd }) {
                />
             </label>
             {/* Date & Time */}
-            <label className="form-field">
+            <div className="form-field">
                <span>Date & Time</span>
-               <input
-                  type="datetime-local" //a built-in HTML input type that gives the user a native date-and-time picker widget
-                  value={dateTime}
-                  onChange={(e) => setDateTime(e.target.value)}
+               <DatePicker
+                  selected={dateTime} //tells the picker which date is currently chosen
+                  onChange={(date) => setDateTime(date)}
+                  showTimeSelect //merges date-picking and time-picking into a single popover
+                  dateFormat="MMM d, yyyy h:mm aa"
+                  placeholderText="Select date & time"
+                  className="datetime-trigger"
                   required
+                  formatWeekDay={(day) => day.charAt(0)}
                />
-            </label>
+            </div>
             {/* Reason */}
             <label className="form-field">
                <span>Reason</span>

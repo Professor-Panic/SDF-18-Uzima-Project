@@ -42,4 +42,66 @@ export default function AddMedicationForm({ onAdd }) {
          setSubmitting(false);
       }
    }
+
+   return (
+      <form onSubmit={handleSubmit}>
+         <h3>Add a medication</h3>
+
+         <label>
+            Name
+            <input
+               type="text"
+               value={name}
+               onChange={(e) => setName(e.target.value)}
+               placeholder="e.g. Atorvastatin"
+               required
+            />
+         </label>
+
+         <label>
+            Dosage
+            <input
+               type="text"
+               value={dosage}
+               onChange={(e) => setDosage(e.target.value)}
+               placeholder="e.g. 20mg"
+               required
+            />
+         </label>
+
+         <label>
+            Quantity per dose
+            <input
+               type="text"
+               value={quantityPerDose}
+               onChange={(e) => setQuantityPerDose(e.target.value)}
+               placeholder="e.g. 1 Tablet"
+            />
+         </label>
+
+         <label>
+            Scheduled time
+            <input
+               type="time"
+               value={scheduledTime}
+               onChange={(e) => setScheduledTime(e.target.value)}
+               required
+            />
+         </label>
+
+         <label>
+            Quantity remaining
+            <input
+               type="number"
+               value={quantityRemaining}
+               onChange={(e) => setQuantityRemaining(e.target.value)}
+               placeholder="e.g. 30"
+            />
+         </label>
+
+         <button type="submit" disabled={submitting}>
+            {submitting ? "Adding..." : "Add medication"}
+         </button>
+      </form>
+   );
 }

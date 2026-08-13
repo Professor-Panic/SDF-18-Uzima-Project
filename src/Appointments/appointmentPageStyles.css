@@ -245,6 +245,16 @@
    accent-color: #0f7a65;
 }
 
+.form-error {
+   margin: 0 0 1rem;
+   padding: 0.6rem 0.85rem;
+   border-radius: 0.6rem;
+   background: rgba(220, 38, 38, 0.08);
+   border: 1px solid rgba(220, 38, 38, 0.2);
+   color: #9f1239;
+   font-size: 0.85rem;
+}
+
 .styled-form .appointment-btn {
    width: 100%;
    justify-content: center;

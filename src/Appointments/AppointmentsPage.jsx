@@ -40,8 +40,7 @@ function AppointmentPage() {
    const [showAppointmentForm, setShowAppointmentForm] = useState(false);
    const [showMedicationForm, setShowMedicationForm] = useState(false);
 
-   // Holds { date, matches } when a calendar day WITH existing appointments
-   // is clicked — powers the "edit or add new" choice popup.
+   // Holds { date, matches } when a calendar day WITH existing appointments is clicked — powers the "edit or add new" choice popup.
    const [dateChoice, setDateChoice] = useState(null);
 
    const appointmentDates = appointments.map((a) => new Date(a.dateTime));
@@ -80,8 +79,7 @@ function AppointmentPage() {
       });
    }
 
-   // Called when a calendar day is clicked. If that day already has
-   // appointments, show the choice popup instead of jumping straight to "add".
+   // Called when a calendar day is clicked. If that day already has appointments, show the choice popup instead of jumping straight to "add".
    function handleCalendarDateClick(date) {
       const matches = findAppointmentsOnDate(date);
       if (matches.length > 0) {
@@ -191,8 +189,6 @@ function AppointmentPage() {
             <div className="appointment-column__header">
                <h3>Upcoming Appointments</h3>
                <div style={{ display: "flex", gap: "0.5rem" }}>
-                  {/* Downloads a .ics file of every appointment for import into
-                      Google Calendar (or Apple/Outlook) — one click, no OAuth */}
                   <button
                      className="appointment-btn appointment-btn--outline"
                      // onClick={() => syncAllToGoogleCalendar(appointments)}

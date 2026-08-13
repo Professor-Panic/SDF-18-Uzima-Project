@@ -108,6 +108,7 @@ export default function AddAppointmentForm({
                   selected={dateTime} //tells the picker which date is currently chosen
                   onChange={(date) => setDateTime(date)}
                   showTimeSelect //merges date-picking and time-picking into a single popover
+                  minDate={new Date()} // can't pick a date/time that's already passed
                   dateFormat="MMM d, yyyy h:mm aa"
                   placeholderText="Select date & time"
                   className="datetime-trigger"

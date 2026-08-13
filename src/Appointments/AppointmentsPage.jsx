@@ -14,6 +14,7 @@ import {
    getMedications,
    addMedication,
    toggleMedicationTaken,
+   deleteMedication,
 } from "../Medication/medicationsService";
 import MedicationRow from "../Medication/MedicationRow";
 import AddMedicationForm from "../Medication/AddMedicationForm";
@@ -27,6 +28,7 @@ function AppointmentPage() {
    const [appointments, setAppointments] = useState([]);
    const [medications, setMedications] = useState([]);
    const [loading, setLoading] = useState(true);
+   const [initialLoadDone, setInitialLoadDone] = useState(false);
    const [toggleError, setToggleError] = useState(null);
 
    // Controls whether the "Book Visit" / "Add Rx" forms are shown
@@ -38,7 +40,7 @@ function AppointmentPage() {
    const [prefilledDate, setPrefilledDate] = useState(null);
 
    async function loadAll() {
-      setLoading(true);
+      if (!initialLoadDone) setLoading(true);
       const [apts, meds] = await Promise.all([
          getAppointments(MOCK_USER_ID),
          getMedications(MOCK_USER_ID),
@@ -46,6 +48,7 @@ function AppointmentPage() {
       setAppointments(apts);
       setMedications(meds);
       setLoading(false);
+      setInitialLoadDone(true);
    }
 
    useEffect(() => {
@@ -66,23 +69,28 @@ function AppointmentPage() {
    async function handleAddAppointment(data) {
       await addAppointment(MOCK_USER_ID, data);
       closeAppointmentForm();
-      await loadAll();
+      // await loadAll();
    }
 
    async function handleUpdateAppointmentStatus(id, status) {
       await updateAppointmentStatus(id, status);
-      await loadAll();
+      // await loadAll();
    }
 
    async function handleDeleteAppointment(id) {
       await deleteAppointment(id);
-      await loadAll();
+      // await loadAll();
    }
 
    async function handleAddMedication(data) {
       await addMedication(MOCK_USER_ID, data);
       setShowMedicationForm(false);
-      await loadAll();
+      // await loadAll();
+   }
+
+   async function handleDeleteMedication(id) {
+      await deleteMedication(id);
+      // await loadAll();
    }
 
    async function handleToggleTaken(id) {
@@ -187,6 +195,7 @@ function AppointmentPage() {
                         key={med.id}
                         medication={med}
                         onToggleTaken={handleToggleTaken}
+                        onDelete={handleDeleteMedication}
                      />
                   ))
                )}
@@ -203,6 +212,7 @@ function AppointmentPage() {
                         key={med.id}
                         medication={med}
                         onToggleTaken={handleToggleTaken}
+                        onDelete={handleDeleteMedication}
                      />
                   ))
                )}

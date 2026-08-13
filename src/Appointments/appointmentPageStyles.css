@@ -560,6 +560,16 @@
    background: color-mix(in srgb, var(--pill-color) 14%, #ffffff);
 }
 
+.med-row-actions {
+   display: flex;
+   align-items: center;
+   gap: 0.6rem;
+}
+
+.med-row-menu {
+   position: relative;
+}
+
 /* ---- Low stock alert ---- */
 .low-stock-alert {
    padding: 1rem 1.1rem;

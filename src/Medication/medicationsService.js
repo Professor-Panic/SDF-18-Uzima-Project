@@ -76,3 +76,10 @@ export async function toggleMedicationTaken(id) {
 
    return mockMedications.find((medication) => medication.id === id);
 }
+
+export async function deleteMedication(id) {
+   await fakeDelay();
+   mockMedications = mockMedications.filter(
+      (medication) => medication.id !== id,
+   );
+}

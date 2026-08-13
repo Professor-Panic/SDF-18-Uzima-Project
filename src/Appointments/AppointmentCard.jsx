@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-
 function formatDateTime(isoString) {
    const date = new Date(isoString);
 
@@ -43,7 +42,7 @@ function AppointmentCard({ appointment, onUpdateStatus, onDelete }) {
    if (appointment.status === "upcoming" && isPast) {
       confirmationPrompt = (
          <div>
-            <p>Did you make it to this one?</p>
+            <p>Did you make it to this appointment?</p>
             <button onClick={() => onUpdateStatus(appointment.id, "completed")}>
                Yes
             </button>
@@ -102,7 +101,7 @@ function AppointmentCard({ appointment, onUpdateStatus, onDelete }) {
          </div>
 
          {confirmationPrompt}
-            
+
          {confirmingDelete && (
             <div className="appointment-delete-confirm">
                <p>Delete this appointment? This can't be undone.</p>

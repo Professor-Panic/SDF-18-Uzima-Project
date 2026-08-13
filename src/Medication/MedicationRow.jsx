@@ -19,6 +19,8 @@ export default function MedicationRow({
 }) {
    const [menuOpen, setMenuOpen] = useState(false);
    const [confirmingDelete, setConfirmingDelete] = useState(false);
+   // Tracks the delete request actually in flight, so a slow network/a second click on "Delete" can't fire onDelete twice for the same row.
+   const [deleting, setDeleting] = useState(false);
    const menuRef = useRef(null);
 
    // close the kebab menu if the user clicks anywhere outside of it
@@ -32,6 +34,18 @@ export default function MedicationRow({
       return () =>
          document.removeEventListener("mousedown", handleClickOutside);
    }, []);
+
+   async function handleConfirmDelete() {
+      if (deleting) return; // already in flight — ignore extra clicks
+      setDeleting(true);
+      try {
+         await onDelete(medication.id);
+         // no need to reset `deleting` on success if its about to unmount
+      } catch (error) {
+         console.error("Failed to delete medication:", error);
+         setDeleting(false); // let them retry if it actually failed
+      }
+   }
 
    return (
       <div>
@@ -50,6 +64,7 @@ export default function MedicationRow({
                   type="checkbox"
                   checked={medication.taken}
                   onChange={() => onToggleTaken(medication.id)}
+                  aria-label={`Mark ${medication.name} as taken`}
                />
 
                <div className="med-row-menu" ref={menuRef}>
@@ -97,14 +112,15 @@ export default function MedicationRow({
                <div className="appointment-confirm-actions">
                   <button
                      className="appointment-delete-confirm-btn"
-                     onClick={() => {
-                        onDelete(medication.id);
-                        setConfirmingDelete(false);
-                     }}
+                     onClick={handleConfirmDelete}
+                     disabled={deleting}
                   >
-                     Delete
+                     {deleting ? "Deleting..." : "Delete"}
                   </button>
-                  <button onClick={() => setConfirmingDelete(false)}>
+                  <button
+                     onClick={() => setConfirmingDelete(false)}
+                     disabled={deleting}
+                  >
                      Cancel
                   </button>
                </div>

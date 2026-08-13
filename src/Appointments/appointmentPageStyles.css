@@ -239,6 +239,24 @@
    backdrop-filter: blur(18px);
    margin-bottom: 1rem;
 }
+
+.calendar-day-contents {
+   position: relative;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 100%;
+   height: 100%;
+}
+
+.calendar-day-dot {
+   position: absolute;
+   bottom: 1px;
+   width: 4px;
+   height: 4px;
+   border-radius: 50%;
+   background: #0f7a65;
+}
 /* ============ Main inline calendar (top-left widget) ============ */
 
 /* 1. Fill the full width of its column, instead of the library's fixed px width */
@@ -334,6 +352,14 @@
 .main-calendar .react-datepicker__day--outside-month {
    visibility: hidden;
    pointer-events: none;
+}
+
+/* On dark/filled day backgrounds (today, selected), the dot needs to be
+   white instead, or it disappears against the dark fill */
+.main-calendar .react-datepicker__day--today .calendar-day-dot,
+.main-calendar .react-datepicker__day--selected .calendar-day-dot,
+.main-calendar .react-datepicker__day--keyboard-selected .calendar-day-dot {
+   background: #fff;
 }
 
 /* ---- Appointment cards ---- */

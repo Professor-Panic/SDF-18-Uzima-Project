@@ -35,6 +35,8 @@ function AppointmentPage() {
    const [showAppointmentForm, setShowAppointmentForm] = useState(false);
    const [showMedicationForm, setShowMedicationForm] = useState(false);
 
+   const appointmentDates = appointments.map((a) => new Date(a.dateTime));
+
    // Holds the date clicked on the calendar, so the modal can open pre-filled.
    // Stays null when the modal was opened via "+ Book Visit" instead.
    const [prefilledDate, setPrefilledDate] = useState(null);
@@ -132,7 +134,10 @@ function AppointmentPage() {
             </div>
 
             <div className="calendar-card">
-               <AppointmentCalendar onDateSelect={openAppointmentForm} />
+               <AppointmentCalendar
+                  onDateSelect={openAppointmentForm}
+                  appointmentDates={appointmentDates}
+               />
             </div>
 
             {/* //Make the form pop up */}

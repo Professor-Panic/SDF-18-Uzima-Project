@@ -4,12 +4,26 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 
-export default function AppointmentCalendar({onDateSelect}){
-   const [selectedDate, setSelectedDate]=useState(null);
+export default function AppointmentCalendar({
+   onDateSelect,
+   appointmentDates = [],
+}) {
+   const [selectedDate, setSelectedDate] = useState(null);
 
-   function handleChange(date){
+   function handleChange(date) {
       setSelectedDate(date);
       onDateSelect?.(date); // notify parent, if it needs to know
+   }
+
+   // true if any appointment falls on this exact day (ignoring time)
+   function hasAppointment(date) {
+      return appointmentDates.some(
+         //two appointments booked on the same day at different times would never match. Comparing year/month/day individually sidesteps that entirely
+         (d) =>
+            d.getFullYear() === date.getFullYear() &&
+            d.getMonth() === date.getMonth() &&
+            d.getDate() === date.getDate(),
+      );
    }
 
    return (
@@ -19,6 +33,12 @@ export default function AppointmentCalendar({onDateSelect}){
          inline
          formatWeekDay={(day) => day.charAt(0)}
          calendarClassName="main-calendar"
+         renderDayContents={(day, date) => (
+            <div className="calendar-day-contents">
+               <span>{day}</span>
+               {hasAppointment(date) && <span className="calendar-day-dot" />}
+            </div>
+         )}
       />
    );
 }

@@ -1,6 +1,4 @@
-// AppointmentPage.jsx
-// Combines Appointments and Medications into one page, matching the
-// "Schedule & Meds" mockup layout.
+// Combines Appointments and Medications into one page
 
 import { useEffect, useState } from "react";
 import {
@@ -34,6 +32,10 @@ function AppointmentPage() {
    const [showAppointmentForm, setShowAppointmentForm] = useState(false);
    const [showMedicationForm, setShowMedicationForm] = useState(false);
 
+   // Holds the date clicked on the calendar, so the modal can open pre-filled.
+   // Stays null when the modal was opened via "+ Book Visit" instead.
+   const [prefilledDate, setPrefilledDate] = useState(null);
+
    async function loadAll() {
       setLoading(true);
       const [apts, meds] = await Promise.all([
@@ -49,9 +51,20 @@ function AppointmentPage() {
       loadAll();
    }, []);
 
+   // "+ Book Visit" opens empty; clicking a calendar day opens with that date set
+   function openAppointmentForm(date = null) {
+      setPrefilledDate(date);
+      setShowAppointmentForm(true);
+   }
+
+   function closeAppointmentForm() {
+      setShowAppointmentForm(false);
+      setPrefilledDate(null);
+   }
+
    async function handleAddAppointment(data) {
       await addAppointment(MOCK_USER_ID, data);
-      setShowAppointmentForm(false);
+      closeAppointmentForm();
       await loadAll();
    }
 
@@ -68,7 +81,7 @@ function AppointmentPage() {
 
    async function handleToggleTaken(id) {
       setMedications((prev) =>
-         prev.map((m) => (m.id === id ? { ...m, taken: !m.taken } : m))
+         prev.map((m) => (m.id === id ? { ...m, taken: !m.taken } : m)),
       );
 
       try {
@@ -76,10 +89,10 @@ function AppointmentPage() {
          setToggleError(null);
       } catch (error) {
          console.error("Failed to toggle medication:", error);
-         setMedications((prev)=>
-            prev.map((m) => (m.id === id ? { ...m, taken: !m.taken }:m))
-         )
-         setToggleError("Couldn't save that change. Try again."); 
+         setMedications((prev) =>
+            prev.map((m) => (m.id === id ? { ...m, taken: !m.taken } : m)),
+         );
+         setToggleError("Couldn't save that change. Try again.");
       }
    }
 
@@ -97,22 +110,27 @@ function AppointmentPage() {
                <h3>Upcoming Appointments</h3>
                <button
                   className="appointment-btn appointment-btn--primary"
-                  onClick={() => setShowAppointmentForm(!showAppointmentForm)}
+                  // onClick={() => setShowAppointmentForm(!showAppointmentForm)}
+                  onClick={() => openAppointmentForm()}
                >
                   + Book Visit
                </button>
             </div>
 
             <div className="calendar-card">
-               <AppointmentCalendar />
+               <AppointmentCalendar onDateSelect={openAppointmentForm} />
             </div>
 
             {/* //Make the form pop up */}
             <Modal
                isOpen={showAppointmentForm}
-               onClose={() => setShowAppointmentForm(false)}
+               // onClose={() => setShowAppointmentForm(false)}
+               onClose={closeAppointmentForm}
             >
-               <AddAppointmentForm onAdd={handleAddAppointment} />
+               <AddAppointmentForm
+                  onAdd={handleAddAppointment}
+                  initialDateTime={prefilledDate}
+               />
             </Modal>
 
             <div>

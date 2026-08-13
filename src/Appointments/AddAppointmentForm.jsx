@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
 
 // Form for logging a new appointment.
-export default function AddAppointmentForm({ onAdd }) {
+export default function AddAppointmentForm({ onAdd, initialDateTime }) {
    const [clinicNameManual, setClinicNameManual] = useState("");
-   const [dateTime, setDateTime] = useState(null);
+   const [dateTime, setDateTime] = useState(initialDateTime ?? null);
    const [reason, setReason] = useState("");
    const [submitting, setSubmitting] = useState(false);
+
+   // whenever the parent hands us a new prefilled date (e.g. from clicking
+   // a day on the calendar), reflect it in the form
+   useEffect(() => {
+      setDateTime(initialDateTime ?? null);
+   }, [initialDateTime]);
 
    async function handleSubmit(e) {
       e.preventDefault();
@@ -20,7 +26,7 @@ export default function AddAppointmentForm({ onAdd }) {
          await onAdd({ clinicNameManual, dateTime, reason });
 
          setClinicNameManual("");
-         setDateTime("");
+         setDateTime(null);
          setReason("");
       } catch (error) {
          console.error("Failed to add appointment:", error);

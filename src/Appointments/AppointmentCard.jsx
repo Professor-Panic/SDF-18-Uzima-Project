@@ -17,7 +17,9 @@ function formatDateTime(isoString) {
    );
 }
 
-function AppointmentCard({ appointment, onUpdateStatus, onDelete }) {
+// onEdit: called with the full appointment object when "Edit" is clicked,
+// so the parent can open the form pre-filled with this appointment's data.
+function AppointmentCard({ appointment, onUpdateStatus, onDelete, onEdit }) {
    //Incase the appointment passes and status wasn't changed then we should prompt user so the status can be changed accurately
    const isPast = new Date(appointment.dateTime) < new Date();
    let confirmationPrompt = null;
@@ -67,6 +69,18 @@ function AppointmentCard({ appointment, onUpdateStatus, onDelete }) {
 
             {menuOpen && (
                <div className="appointment-dropdown" role="menu">
+                  {/* Edit option — sits above Delete since it's the safer,
+                      more commonly used action */}
+                  <button
+                     role="menuitem"
+                     className="appointment-dropdown-item"
+                     onClick={() => {
+                        setMenuOpen(false);
+                        onEdit(appointment);
+                     }}
+                  >
+                     Edit appointment
+                  </button>
                   <button
                      role="menuitem"
                      className="appointment-dropdown-item appointment-dropdown-item--danger"

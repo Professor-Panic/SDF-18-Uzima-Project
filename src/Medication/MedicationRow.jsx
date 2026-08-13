@@ -11,8 +11,13 @@ function PillIcon({ color = "#0f7a33" }) {
 
 // Displays a single medication with a checkbox to mark it taken/untaken.
 
-export default function MedicationRow({ medication, onToggleTaken, onDelete }) {
-   const [menuOpen, setMenuOpen] = useState(false)
+export default function MedicationRow({
+   medication,
+   onToggleTaken,
+   onDelete,
+   onEdit,
+}) {
+   const [menuOpen, setMenuOpen] = useState(false);
    const [confirmingDelete, setConfirmingDelete] = useState(false);
    const menuRef = useRef(null);
 
@@ -28,72 +33,83 @@ export default function MedicationRow({ medication, onToggleTaken, onDelete }) {
          document.removeEventListener("mousedown", handleClickOutside);
    }, []);
 
-      return (
-         <div>
-            <div className="med-row">
-               <PillIcon color="#0f7a33" />
-               <div>
-                  <p className="med-row__name">{medication.name}</p>
-                  <p className="med-row__meta">
-                     {medication.dosage} • {medication.quantityPerDose}
-                  </p>
-               </div>
-
-               <div className="med-row-actions">
-                  <input
-                     className="med-row__checkbox"
-                     type="checkbox"
-                     checked={medication.taken}
-                     onChange={() => onToggleTaken(medication.id)}
-                  />
-
-                  <div className="med-row-menu" ref={menuRef}>
-                     <button
-                        className="appointment-kebab"
-                        aria-label="Medication options"
-                        aria-expanded={menuOpen}
-                        onClick={() => setMenuOpen((open) => !open)}
-                     >
-                        ⋮
-                     </button>
-
-                     {menuOpen && (
-                        <div className="appointment-dropdown" role="menu">
-                           <button
-                              role="menuitem"
-                              className="appointment-dropdown-item appointment-dropdown-item--danger"
-                              onClick={() => {
-                                 setMenuOpen(false);
-                                 setConfirmingDelete(true);
-                              }}
-                           >
-                              Delete medication
-                           </button>
-                        </div>
-                     )}
-                  </div>
-               </div>
+   return (
+      <div>
+         <div className="med-row">
+            <PillIcon color="#0f7a33" />
+            <div>
+               <p className="med-row__name">{medication.name}</p>
+               <p className="med-row__meta">
+                  {medication.dosage} • {medication.quantityPerDose}
+               </p>
             </div>
 
-            {confirmingDelete && (
-               <div className="appointment-delete-confirm">
-                  <p>Delete this medication? This can't be undone.</p>
-                  <div className="appointment-confirm-actions">
-                     <button
-                        className="appointment-delete-confirm-btn"
-                        onClick={() => {
-                           onDelete(medication.id);
-                           setConfirmingDelete(false);
-                        }}
-                     >
-                        Delete
-                     </button>
-                     <button onClick={() => setConfirmingDelete(false)}>
-                        Cancel
-                     </button>
-                  </div>
+            <div className="med-row-actions">
+               <input
+                  className="med-row__checkbox"
+                  type="checkbox"
+                  checked={medication.taken}
+                  onChange={() => onToggleTaken(medication.id)}
+               />
+
+               <div className="med-row-menu" ref={menuRef}>
+                  <button
+                     className="appointment-kebab"
+                     aria-label="Medication options"
+                     aria-expanded={menuOpen}
+                     onClick={() => setMenuOpen((open) => !open)}
+                  >
+                     ⋮
+                  </button>
+
+                  {menuOpen && (
+                     <div className="appointment-dropdown" role="menu">
+                        <button
+                           role="menuitem"
+                           className="appointment-dropdown-item"
+                           onClick={() => {
+                              setMenuOpen(false);
+                              onEdit(medication);
+                           }}
+                        >
+                           Edit medication
+                        </button>
+
+                        <button
+                           role="menuitem"
+                           className="appointment-dropdown-item appointment-dropdown-item--danger"
+                           onClick={() => {
+                              setMenuOpen(false);
+                              setConfirmingDelete(true);
+                           }}
+                        >
+                           Delete medication
+                        </button>
+                     </div>
+                  )}
                </div>
-            )}
+            </div>
          </div>
-      );
+
+         {confirmingDelete && (
+            <div className="appointment-delete-confirm">
+               <p>Delete this medication? This can't be undone.</p>
+               <div className="appointment-confirm-actions">
+                  <button
+                     className="appointment-delete-confirm-btn"
+                     onClick={() => {
+                        onDelete(medication.id);
+                        setConfirmingDelete(false);
+                     }}
+                  >
+                     Delete
+                  </button>
+                  <button onClick={() => setConfirmingDelete(false)}>
+                     Cancel
+                  </button>
+               </div>
+            </div>
+         )}
+      </div>
+   );
 }

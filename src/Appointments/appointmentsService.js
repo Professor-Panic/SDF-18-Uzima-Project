@@ -79,3 +79,12 @@ export async function deleteAppointment(id) {
       (appointment) => appointment.id !== id,
    );
 }
+
+// Updates an appointment's editable details (not just status).
+export async function updateAppointment(id, updatedData) {
+   await fakeDelay();
+   mockAppointments = mockAppointments.map((appointment) =>
+      appointment.id === id ? { ...appointment, ...updatedData } : appointment,
+   );
+   return mockAppointments.find((appointment) => appointment.id === id);
+}

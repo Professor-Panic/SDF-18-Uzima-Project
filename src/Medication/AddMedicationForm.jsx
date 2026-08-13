@@ -1,13 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
-
 
 function formatTimeForStorage(date) {
    const hours = String(date.getHours()).padStart(2, "0");
    const minutes = String(date.getMinutes()).padStart(2, "0");
    return `${hours}:${minutes}`;
+}
+
+// Builds a Date object from a stored "HH:mm" string, so DatePicker can display it.
+// (DatePicker needs a real Date, but we store time as a plain string.)
+function parseStoredTime(timeString) {
+   if (!timeString) return null;
+   const [hours, minutes] = timeString.split(":").map(Number);
+   const date = new Date();
+   date.setHours(hours, minutes, 0, 0);
+   return date;
 }
 
 // Decides whether a given 24-hour time string counts as "Morning" or "Evening".
@@ -17,13 +25,40 @@ function deriveTimeLabel(scheduledTime) {
    return hour < 12 ? "Morning" : "Evening"; // <Familiar ternary>. Anything before noon (hour 12) counts as Morning, everything else Evening
 }
 
-export default function AddMedicationForm({ onAdd }) {
+export default function AddMedicationForm({
+   onAdd,
+   onUpdate,
+   editingMedication,
+}) {
    const [name, setName] = useState("");
    const [dosage, setDosage] = useState("");
    const [quantityPerDose, setQuantityPerDose] = useState("");
    const [scheduledTime, setScheduledTime] = useState(null);
    const [quantityRemaining, setQuantityRemaining] = useState("");
    const [submitting, setSubmitting] = useState(false);
+
+   const isEditing = Boolean(editingMedication);
+
+   // Whenever the parent hands us a medication to edit, fill the form with
+   // its current values, converting the stored "HH:mm" string back into a
+   // Date so DatePicker can display it correctly.
+   useEffect(() => {
+      if (editingMedication) {
+         setName(editingMedication.name);
+         setDosage(editingMedication.dosage);
+         setQuantityPerDose(editingMedication.quantityPerDose || "");
+         setScheduledTime(parseStoredTime(editingMedication.scheduledTime));
+         setQuantityRemaining(
+            String(editingMedication.quantityRemaining ?? ""),
+         );
+      } else {
+         setName("");
+         setDosage("");
+         setQuantityPerDose("");
+         setScheduledTime(null);
+         setQuantityRemaining("");
+      }
+   }, [editingMedication]);
 
    async function handleSubmit(e) {
       e.preventDefault();
@@ -33,14 +68,20 @@ export default function AddMedicationForm({ onAdd }) {
 
       setSubmitting(true);
       try {
-         await onAdd({
+         const payload = {
             name,
             dosage,
             quantityPerDose,
             scheduledTime: formatTimeForStorage(scheduledTime),
             timeLabel: deriveTimeLabel(scheduledTime), //instead of trusting a form field for timeLabel, we compute it right here, guaranteeing it always correctly matches whatever scheduledTime was actually picked
             quantityRemaining: Number(quantityRemaining), //converts it properly to a number
-         });
+         };
+
+         if (isEditing) {
+            await onUpdate(editingMedication.id, payload);
+         } else {
+            await onAdd(payload);
+         }
 
          setName("");
          setDosage("");
@@ -56,7 +97,7 @@ export default function AddMedicationForm({ onAdd }) {
 
    return (
       <form className="styled-form" onSubmit={handleSubmit}>
-         <h3>Add a medication</h3>
+         <h3>{isEditing ? "Edit medication" : "Add a medication"}</h3>
 
          <label className="form-field">
             <span>Name</span>
@@ -120,7 +161,11 @@ export default function AddMedicationForm({ onAdd }) {
             type="submit"
             disabled={submitting}
          >
-            {submitting ? "Adding..." : "Add medication"}
+            {submitting
+               ? "Saving..."
+               : isEditing
+                 ? "Save Changes"
+                 : "Add medication"}
          </button>
       </form>
    );

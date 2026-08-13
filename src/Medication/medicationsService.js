@@ -83,3 +83,14 @@ export async function deleteMedication(id) {
       (medication) => medication.id !== id,
    );
 }
+
+// Updates a medication's editable details (not just the taken checkbox).
+export async function updateMedication(id, updatedData) {
+   await fakeDelay();
+
+   mockMedications = mockMedications.map((medication) =>
+      medication.id === id ? { ...medication, ...updatedData } : medication,
+   );
+
+   return mockMedications.find((medication) => medication.id === id);
+}

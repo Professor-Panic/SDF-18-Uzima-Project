@@ -230,31 +230,60 @@ export function ShowMap() {
     }, [cur_pos, facilities]);
 
     return (
-        <>
-            <div
-                ref={mapElementRef}
-                id="map"
-            />
+        <div className="map-workspace">
+            <div className="map-grid">
 
-            {loadError && (
-                <p className="facility-load-error">
-                    {loadError}
-                </p>
-            )}
+                <section className="map-panel">
+                    <div
+                        ref={mapElementRef}
+                        id="map"
+                    />
+                </section>
 
-            <ul className="hos-distances-list">
-                {hospDistances.filter(facility =>facility.distanceKm < 1.0)
-                    .map(
-                        facility => (
-                            <li key={facility.key}className="hos-distances">
-                                <p>{facility.name}</p>
-                                <p>{facility.facilityType}</p>
-                                <p>{facility.distanceKm.toFixed(2)} km</p>
-                            </li>
-                        )
+                <aside className="distance-panel">
+                    <div className="distance-panel__header">
+                        <p className="distance-panel__eyebrow">
+                            HEALTHCARE NEAR YOU
+                        </p>
+
+                        <h2>Nearby Facilities</h2>
+
+                        <p className="distance-panel__copy">
+                            Healthcare facilities within 1 km of your current location.
+                        </p>
+                    </div>
+
+                    {loadError && (
+                        <p className="facility-load-error">
+                            {loadError}
+                        </p>
                     )}
-            </ul>
-        </>
+
+                    <ul className="hos-distances-list">
+                        {hospDistances
+                            .filter(
+                                (facility) =>
+                                    facility.distanceKm < 1.0
+                            )
+                            .map((facility) => (
+                                <li
+                                    key={facility.key}
+                                    className="hos-distances"
+                                >
+                                    <p>{facility.name}</p>
+
+                                    <p>{facility.facilityType}</p>
+
+                                    <p>
+                                        {facility.distanceKm.toFixed(2)} km
+                                    </p>
+                                </li>
+                            ))}
+                    </ul>
+                </aside>
+
+            </div>
+        </div>
     );
 }
 

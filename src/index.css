@@ -1,0 +1,814 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    min-width: 320px;
+    font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+    color: #11211d;
+    background:
+        radial-gradient(circle at top left, rgba(48, 153, 130, 0.14), transparent 36%),
+        radial-gradient(circle at top right, rgba(14, 109, 90, 0.12), transparent 30%),
+        linear-gradient(180deg, #f8fbfd 0%, #eef4f2 100%);
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    border: 0;
+    background: none;
+    color: inherit;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+.app-shell {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    min-height: 100vh;
+}
+
+.app-main {
+    padding: 1.6rem;
+    min-width: 0;
+}
+
+.route-page {
+    display: grid;
+    gap: 1rem;
+}
+
+.route-page__hero {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.35rem;
+    border-radius: 1.5rem;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+    backdrop-filter: blur(18px);
+}
+
+.route-page__hero h1 {
+    margin: 0;
+    font-size: clamp(1.7rem, 2vw + 1rem, 3rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+}
+
+.route-page__status {
+    align-self: stretch;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 180px;
+    padding: 0.95rem 1.1rem;
+    border-radius: 1.1rem;
+    background: linear-gradient(135deg, #0f7a65, #14906f);
+    color: #f6fffb;
+    font-weight: 700;
+    box-shadow: 0 16px 30px rgba(15, 122, 101, 0.24);
+}
+
+.route-page__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.route-card {
+    padding: 1.1rem;
+    border-radius: 1.4rem;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+    backdrop-filter: blur(18px);
+}
+
+.route-card h2 {
+    margin: 0.15rem 0 0;
+    font-size: 1.1rem;
+    letter-spacing: -0.03em;
+}
+
+.route-card p {
+    margin: 0.55rem 0 0;
+    color: #5d6e68;
+    line-height: 1.55;
+}
+
+.route-card__eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #5e8579;
+}
+
+.map-workspace {
+    min-width: 0;
+}
+
+.map-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 1rem;
+    align-items: start;
+}
+
+.map-panel {
+    min-height: 72vh;
+    padding: 0.9rem;
+    border-radius: 1.6rem;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+    backdrop-filter: blur(16px);
+}
+
+.map-canvas {
+    width: 100%;
+    height: 100%;
+    min-height: calc(72vh - 1.8rem);
+    border-radius: 1.15rem;
+    overflow: hidden;
+}
+
+.distance-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.1rem;
+    border-radius: 1.6rem;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+    backdrop-filter: blur(18px);
+}
+
+.distance-panel__header h2 {
+    margin: 0.15rem 0 0;
+    font-size: 1.2rem;
+    letter-spacing: -0.03em;
+}
+
+.distance-panel__eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #5e8579;
+}
+
+.distance-panel__copy {
+    margin: 0.55rem 0 0;
+    color: #5d6e68;
+    line-height: 1.55;
+}
+
+.hos-distances-list {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.hos-distances {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.95rem 1rem;
+    border-radius: 1.05rem;
+    background: rgba(15, 122, 101, 0.06);
+    border: 1px solid rgba(15, 122, 101, 0.1);
+}
+
+.hos-distances--empty {
+    justify-content: flex-start;
+}
+
+.hos-distances__name {
+    margin: 0;
+    font-weight: 700;
+    color: #11211d;
+}
+
+.hos-distances__meta {
+    margin: 0.2rem 0 0;
+    color: #5d6e68;
+    font-size: 0.92rem;
+    line-height: 1.45;
+}
+
+.hos-distances__distance {
+    margin: 0;
+    color: #0f7a65;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.facility-load-error {
+    margin: 0 0 1rem;
+    padding: 0.9rem 1rem;
+    border-radius: 1rem;
+    background: rgba(220, 38, 38, 0.08);
+    border: 1px solid rgba(220, 38, 38, 0.16);
+    color: #9f1239;
+}
+
+.app-main__hero {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding: 1.25rem 1.35rem;
+    border-radius: 1.5rem;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+    backdrop-filter: blur(18px);
+}
+
+.app-eyebrow {
+    margin: 0 0 0.35rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #5e8579;
+}
+
+.app-main__hero h1 {
+    margin: 0;
+    font-size: clamp(1.7rem, 2vw + 1rem, 3rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    max-width: 16ch;
+}
+
+.app-subtitle {
+    margin: 0.75rem 0 0;
+    max-width: 56ch;
+    color: #5d6e68;
+    line-height: 1.6;
+}
+
+.mental-health-page {
+    display: grid;
+    gap: 1rem;
+}
+
+.mental-health-hero {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.35rem;
+    border-radius: 1.5rem;
+    background:
+        linear-gradient(135deg, rgba(15, 122, 101, 0.16), rgba(255, 255, 255, 0.82)),
+        rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+    backdrop-filter: blur(18px);
+}
+
+.mental-health-hero h1 {
+    margin: 0;
+    font-size: clamp(1.7rem, 2vw + 1rem, 3rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+}
+
+.mental-health-hero__badge {
+    align-self: stretch;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 220px;
+    padding: 0.95rem 1.1rem;
+    border-radius: 1.1rem;
+    background: linear-gradient(135deg, #0f7a65, #14906f);
+    color: #f6fffb;
+    font-weight: 700;
+    box-shadow: 0 16px 30px rgba(15, 122, 101, 0.24);
+}
+
+.mental-health-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.75fr);
+    gap: 1rem;
+    align-items: start;
+}
+
+.mental-health-chat,
+.mental-health-card,
+.mental-health-crisis {
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    background: rgba(255, 255, 255, 0.76);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+    backdrop-filter: blur(18px);
+}
+
+.mental-health-chat {
+    display: grid;
+    gap: 1rem;
+    padding: 1.1rem;
+    border-radius: 1.6rem;
+}
+
+.mental-health-chat__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.mental-health-chat__header h2 {
+    margin: 0.15rem 0 0;
+    font-size: 1.2rem;
+    letter-spacing: -0.03em;
+}
+
+.mental-health-eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #5e8579;
+}
+
+.mental-health-reset {
+    flex: 0 0 auto;
+    padding: 0.72rem 0.95rem;
+    border-radius: 0.95rem;
+    border: 1px solid rgba(15, 122, 101, 0.15);
+    background: rgba(15, 122, 101, 0.08);
+    color: #0f5f4f;
+    font-weight: 700;
+}
+
+.mental-health-chat__feed {
+    display: grid;
+    gap: 0.75rem;
+    min-height: 28rem;
+    max-height: 34rem;
+    padding: 0.35rem;
+    overflow: auto;
+}
+
+.chat-bubble {
+    max-width: 92%;
+    padding: 0.95rem 1rem;
+    border-radius: 1.1rem;
+    line-height: 1.55;
+    white-space: pre-wrap;
+}
+
+.chat-bubble--bot {
+    justify-self: flex-start;
+    background: rgba(15, 122, 101, 0.08);
+    color: #13302a;
+    border-bottom-left-radius: 0.45rem;
+}
+
+.chat-bubble--user {
+    justify-self: flex-end;
+    background: linear-gradient(135deg, #0f7a65, #14906f);
+    color: #f6fffb;
+    border-bottom-right-radius: 0.45rem;
+}
+
+.chat-bubble--crisis {
+    background: rgba(220, 38, 38, 0.1);
+    color: #7f1d1d;
+    border: 1px solid rgba(220, 38, 38, 0.18);
+}
+
+.chat-bubble--system,
+.chat-bubble--question,
+.chat-bubble--tip,
+.chat-bubble--intro {
+    background: rgba(15, 122, 101, 0.08);
+    color: #13302a;
+}
+
+.mental-health-crisis {
+    display: grid;
+    gap: 0.7rem;
+    padding: 1rem;
+    border-radius: 1.2rem;
+    background: rgba(220, 38, 38, 0.08);
+    border-color: rgba(220, 38, 38, 0.16);
+}
+
+.mental-health-crisis__eyebrow,
+.mental-health-card__eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #8a2f2f;
+}
+
+.mental-health-crisis__copy {
+    margin: 0;
+    color: #7f1d1d;
+    line-height: 1.55;
+}
+
+.mental-health-crisis__numbers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+}
+
+.mental-health-crisis__numbers span,
+.mental-health-list li {
+    display: inline-flex;
+    padding: 0.55rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    color: #27342f;
+    line-height: 1.35;
+}
+
+.mental-health-chat__composer {
+    display: grid;
+    gap: 0.9rem;
+}
+
+.mental-health-quick-replies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+}
+
+.mental-health-chip {
+    padding: 0.75rem 0.95rem;
+    border-radius: 999px;
+    border: 1px solid rgba(15, 122, 101, 0.14);
+    background: rgba(15, 122, 101, 0.06);
+    color: #0f5f4f;
+    font-weight: 700;
+}
+
+.mental-health-input-row {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.mental-health-input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.95rem 1rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(255, 255, 255, 0.92);
+    color: #11211d;
+    outline: none;
+}
+
+.mental-health-input:focus {
+    border-color: rgba(15, 122, 101, 0.45);
+    box-shadow: 0 0 0 4px rgba(15, 122, 101, 0.12);
+}
+
+.mental-health-send {
+    padding: 0.95rem 1.1rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #0f7a65, #14906f);
+    color: #f6fffb;
+    font-weight: 700;
+    min-width: 96px;
+    box-shadow: 0 16px 30px rgba(15, 122, 101, 0.24);
+}
+
+.mental-health-sidebar {
+    display: grid;
+    gap: 1rem;
+}
+
+.mental-health-card {
+    display: grid;
+    gap: 0.65rem;
+    padding: 1.1rem;
+    border-radius: 1.5rem;
+}
+
+.mental-health-card h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    letter-spacing: -0.03em;
+}
+
+.mental-health-card p {
+    margin: 0;
+    color: #5d6e68;
+    line-height: 1.55;
+}
+
+.mental-health-card--support {
+    background: linear-gradient(180deg, rgba(15, 122, 101, 0.12), rgba(255, 255, 255, 0.78));
+}
+
+.mental-health-list {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.mental-health-list li {
+    justify-content: flex-start;
+    border-radius: 1rem;
+}
+
+.app-hero__chip {
+    align-self: stretch;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 220px;
+    padding: 0.95rem 1.1rem;
+    border-radius: 1.1rem;
+    background: linear-gradient(135deg, #0f7a65, #14906f);
+    color: #f6fffb;
+    font-weight: 700;
+    box-shadow: 0 16px 30px rgba(15, 122, 101, 0.24);
+}
+
+.sidebar-shell {
+    padding: 1rem;
+}
+
+.sidebar-shell__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: calc(100vh - 2rem);
+    padding: 1.1rem;
+    border-radius: 1.8rem;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background:
+        linear-gradient(180deg, rgba(8, 30, 27, 0.95) 0%, rgba(13, 41, 36, 0.94) 100%);
+    box-shadow: 0 26px 60px rgba(8, 30, 27, 0.18);
+    color: #dbe9e4;
+}
+
+.brand-block {
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 0.35rem 0.2rem 0.8rem;
+}
+
+.brand-block__icon {
+    display: grid;
+    place-items: center;
+    width: 2.7rem;
+    height: 2.7rem;
+    border-radius: 0.95rem;
+    background: linear-gradient(145deg, #1fd3a7, #0f7a65);
+    color: #effff9;
+    box-shadow: 0 12px 24px rgba(15, 122, 101, 0.32);
+}
+
+.brand-block h1 {
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+}
+
+.brand-block p {
+    margin: 0.25rem 0 0;
+    color: rgba(219, 233, 228, 0.7);
+    font-size: 0.9rem;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.sidebar-nav__item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    width: 100%;
+    padding: 0.88rem 0.95rem;
+    border-radius: 1rem;
+    color: rgba(219, 233, 228, 0.82);
+    text-align: left;
+    text-decoration: none;
+    transition: transform 160ms ease, background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.sidebar-nav__item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateX(2px);
+}
+
+.sidebar-nav__item.is-active {
+    background: linear-gradient(135deg, rgba(31, 211, 167, 0.18), rgba(20, 144, 111, 0.3));
+    color: #f3fffb;
+    box-shadow: inset 0 0 0 1px rgba(112, 243, 202, 0.18);
+}
+
+.sidebar-nav__icon {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.8rem;
+    background: rgba(255, 255, 255, 0.06);
+    color: inherit;
+    flex: 0 0 auto;
+}
+
+.sidebar-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding-top: 1rem;
+}
+
+.sidebar-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    width: 100%;
+    padding: 0.95rem 1rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #1fd3a7, #0f7a65);
+    color: white;
+    font-weight: 700;
+    box-shadow: 0 18px 30px rgba(15, 122, 101, 0.28);
+}
+
+.sidebar-utility-links {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.sidebar-utility-link {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    width: 100%;
+    padding: 0.82rem 0.9rem;
+    border-radius: 0.95rem;
+    color: rgba(219, 233, 228, 0.8);
+    text-decoration: none;
+    transition: background-color 160ms ease, color 160ms ease;
+    text-align: left;
+}
+
+.sidebar-utility-link:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+}
+
+@media (max-width: 1100px) {
+    .app-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .route-page__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .map-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar-shell {
+        padding-bottom: 0;
+    }
+
+    .sidebar-shell__inner {
+        min-height: auto;
+    }
+
+    .app-main__hero {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .mental-health-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .route-page__hero {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .app-hero__chip {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .route-page__status {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .map-panel {
+        min-height: 58vh;
+    }
+
+    .map-canvas {
+        min-height: calc(58vh - 1.8rem);
+    }
+
+    .mental-health-chat__feed {
+        min-height: 24rem;
+        max-height: none;
+    }
+}
+
+@media (max-width: 720px) {
+    .app-main {
+        padding: 1rem;
+    }
+
+    .sidebar-shell {
+        padding: 0.75rem;
+    }
+
+    .sidebar-shell__inner,
+    .app-main__hero,
+    .route-page__hero,
+    .route-card {
+        border-radius: 1.3rem;
+    }
+
+    .mental-health-hero,
+    .mental-health-chat,
+    .mental-health-card {
+        border-radius: 1.3rem;
+    }
+
+    .mental-health-chat__header,
+    .mental-health-input-row {
+        flex-direction: column;
+    }
+
+    .mental-health-reset,
+    .mental-health-send {
+        width: 100%;
+    }
+
+    .chat-bubble {
+        max-width: 100%;
+    }
+
+    .map-panel,
+    .distance-panel {
+        border-radius: 1.3rem;
+    }
+
+    .map-panel {
+        min-height: 52vh;
+    }
+
+    .map-canvas {
+        min-height: calc(52vh - 1.8rem);
+    }
+}

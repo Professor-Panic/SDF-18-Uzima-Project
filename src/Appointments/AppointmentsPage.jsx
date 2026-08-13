@@ -5,6 +5,7 @@ import {
    getAppointments,
    addAppointment,
    updateAppointmentStatus,
+   deleteAppointment,
 } from "./appointmentsService";
 import AppointmentCard from "./AppointmentCard";
 import AddAppointmentForm from "./AddAppointmentForm";
@@ -70,6 +71,11 @@ function AppointmentPage() {
 
    async function handleUpdateAppointmentStatus(id, status) {
       await updateAppointmentStatus(id, status);
+      await loadAll();
+   }
+
+   async function handleDeleteAppointment(id) {
+      await deleteAppointment(id);
       await loadAll();
    }
 
@@ -143,6 +149,7 @@ function AppointmentPage() {
                         key={appointment.id}
                         appointment={appointment}
                         onUpdateStatus={handleUpdateAppointmentStatus}
+                        onDelete={handleDeleteAppointment}
                      />
                   ))
                )}

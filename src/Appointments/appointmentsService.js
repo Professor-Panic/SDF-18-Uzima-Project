@@ -72,3 +72,10 @@ export async function updateAppointmentStatus(id, status) {
    return mockAppointments.find((appointment) => appointment.id === id);
    //immediately see the result of the update without needing to re-fetch everything.
 }
+
+export async function deleteAppointment(id) {
+   await fakeDelay();
+   mockAppointments = mockAppointments.filter(
+      (appointment) => appointment.id !== id,
+   );
+}

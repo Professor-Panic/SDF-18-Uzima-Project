@@ -207,6 +207,22 @@
    box-shadow: 0 0 0 3px rgba(15, 122, 101, 0.14);
 }
 
+.form-checkbox {
+   display: flex;
+   align-items: center;
+   gap: 0.5rem;
+   margin-bottom: 1rem;
+   font-size: 0.85rem;
+   color: #5d6e68;
+   cursor: pointer;
+}
+
+.form-checkbox input {
+   width: 16px;
+   height: 16px;
+   accent-color: #0f7a65;
+}
+
 .styled-form .appointment-btn {
    width: 100%;
    justify-content: center;

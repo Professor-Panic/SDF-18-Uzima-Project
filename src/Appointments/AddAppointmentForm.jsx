@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
+
+import { buildGoogleCalendarUrl } from "./googleCalendar";
 
 // Form for logging a new appointment.
 export default function AddAppointmentForm({ onAdd, initialDateTime }) {
@@ -8,6 +9,7 @@ export default function AddAppointmentForm({ onAdd, initialDateTime }) {
    const [dateTime, setDateTime] = useState(initialDateTime ?? null);
    const [reason, setReason] = useState("");
    const [submitting, setSubmitting] = useState(false);
+   const [addToGoogleCalendar, setAddToGoogleCalendar] = useState(false);
 
    // whenever the parent hands us a new prefilled date (e.g. from clicking
    // a day on the calendar), reflect it in the form
@@ -24,6 +26,14 @@ export default function AddAppointmentForm({ onAdd, initialDateTime }) {
       setSubmitting(true);
       try {
          await onAdd({ clinicNameManual, dateTime, reason });
+
+         // open Google Calendar's prefilled "add event" screen in a new tab
+         if (addToGoogleCalendar) {
+            window.open(
+               buildGoogleCalendarUrl({ clinicNameManual, dateTime, reason }),
+               "_blank",
+            );
+         }
 
          setClinicNameManual("");
          setDateTime(null);
@@ -73,6 +83,15 @@ export default function AddAppointmentForm({ onAdd, initialDateTime }) {
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
                />
+            </label>
+
+            <label className="form-checkbox">
+               <input
+                  type="checkbox"
+                  checked={addToGoogleCalendar}
+                  onChange={(e) => setAddToGoogleCalendar(e.target.checked)}
+               />
+               <span>Also add to Google Calendar</span>
             </label>
             <button
                className="appointment-btn appointment-btn--primary"

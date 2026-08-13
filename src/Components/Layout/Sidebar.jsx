@@ -12,7 +12,7 @@ import {
 
 import { useState } from "react";
 
-import "./appointmentPageStyles.css";
+import "../../appointmentPageStyles.css";
 
 const menuItems = [
   {

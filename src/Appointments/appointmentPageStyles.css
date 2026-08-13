@@ -533,6 +533,17 @@
    transform: translate(-50%, -60%) rotate(45deg);
 }
 
+.med-row__icon {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 1.9rem;
+   height: 1.9rem;
+   flex-shrink: 0;
+   border-radius: 50%;
+   background: color-mix(in srgb, var(--pill-color) 14%, #ffffff);
+}
+
 /* ---- Low stock alert ---- */
 .low-stock-alert {
    padding: 1rem 1.1rem;

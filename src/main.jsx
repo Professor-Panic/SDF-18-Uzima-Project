@@ -13,6 +13,7 @@ createRoot(document.getElementById("root")).render(
          <Route path="/dashboard" element={<Header/>}/>
          <Route path="/appointments" element={<AppointmentPage/>}/>
          <Route path="/map" element={<ShowMap/>}/>
+         <Route path="/sidebar" element={<Sidebar/>}/>
       </Routes>
       </BrowserRouter>
    </StrictMode>,

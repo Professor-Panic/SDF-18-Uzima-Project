@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppointmentPage from "./Appointments/AppointmentsPage";
 import Header from "./Dashboard/Dashboard"
 import { ShowMap } from "./Map/Map";
+import {Sidebar} from "./Components/Sidebar"
 createRoot(document.getElementById("root")).render(
    <StrictMode>
       <BrowserRouter>

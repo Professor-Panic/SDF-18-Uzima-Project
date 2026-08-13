@@ -229,6 +229,7 @@
 .main-calendar {
    width: 100% !important;
    font-size: 1rem;
+   display: flex;
 }
 .main-calendar .react-datepicker__month-container {
    width: 100%;
@@ -321,7 +322,8 @@
 
 /* ---- Appointment cards ---- */
 .appointment-card {
-   padding: 1.1rem 1.25rem;
+   position: relative; /* anchor point for the kebab menu button/dropdown */
+   padding: 1.1rem 2.75rem 1.1rem 1.25rem; /* extra right padding so text doesn't run under the kebab */
    border-radius: 1.3rem;
    background: rgba(255, 255, 255, 0.72);
    border: 1px solid rgba(148, 163, 184, 0.14);
@@ -340,6 +342,124 @@
    margin: 0.2rem 0 0;
    color: #5d6e68;
    font-size: 0.88rem;
+}
+
+/* Row that splits reason+status (left) from the date (right) so the card
+   isn't lopsided with everything crammed onto one side */
+.appointment-card-body {
+   display: flex;
+   justify-content: space-between;
+   align-items: flex-start;
+   gap: 12px;
+}
+
+.appointment-card-left {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   gap: 0.4rem;
+}
+
+.appointment-card-right {
+   flex-shrink: 0; /* keeps the date from wrapping/squeezing when the left side is long */
+}
+
+/* Reuses the .appointment-card p color/size, just right-aligned */
+.appointment-datetime {
+   text-align: right;
+}
+
+/* Kebab menu, top-right corner of the card */
+.appointment-card-menu {
+   position: absolute;
+   top: 0.7rem;
+   right: 0.7rem;
+}
+
+.appointment-kebab {
+   width: 1.9rem;
+   height: 1.9rem;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 50%;
+   font-size: 1.1rem;
+   line-height: 1;
+   color: #5d6e68;
+   background: transparent;
+   border: none;
+   cursor: pointer;
+}
+
+.appointment-kebab:hover {
+   background: rgba(148, 163, 184, 0.16);
+   color: #11211d;
+}
+
+.appointment-dropdown {
+   position: absolute;
+   top: 2.2rem;
+   right: 0;
+   min-width: 180px;
+   overflow: hidden;
+   border-radius: 0.9rem;
+   background: #ffffff;
+   border: 1px solid rgba(148, 163, 184, 0.14);
+   box-shadow: 0 20px 45px rgba(15, 23, 42, 0.14);
+   z-index: 10;
+}
+
+.appointment-dropdown-item {
+   display: block;
+   width: 100%;
+   text-align: left;
+   padding: 0.65rem 0.9rem;
+   background: none;
+   border: none;
+   font-size: 0.85rem;
+   cursor: pointer;
+}
+
+.appointment-dropdown-item:hover {
+   background: rgba(148, 163, 184, 0.1);
+}
+
+.appointment-dropdown-item--danger {
+   color: #9f1239; /* same rose as .appointment-status--missed */
+}
+
+/* Inline "are you sure?" step shown before an appointment is actually deleted */
+.appointment-delete-confirm {
+   margin-top: 0.75rem;
+   padding-top: 0.75rem;
+   border-top: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.appointment-delete-confirm p {
+   margin: 0 0 0.6rem;
+   color: #11211d;
+   font-size: 0.85rem;
+}
+
+.appointment-confirm-actions {
+   display: flex;
+   gap: 0.5rem;
+}
+
+.appointment-confirm-actions button {
+   padding: 0.45rem 0.9rem;
+   border-radius: 0.6rem;
+   border: 1px solid rgba(148, 163, 184, 0.3);
+   background: #f2fdf4;
+   font-size: 0.8rem;
+   font-weight: 700;
+   cursor: pointer;
+}
+
+.appointment-delete-confirm-btn {
+   background: rgba(220, 38, 38, 0.08) !important;
+   border-color: rgba(220, 38, 38, 0.2) !important;
+   color: #9f1239;
 }
 
 /* ---- Today's Meds card ---- */

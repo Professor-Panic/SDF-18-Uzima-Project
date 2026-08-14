@@ -1,3 +1,10 @@
+/**
+ * index.css
+ *
+ * Legacy global styles were cleaned up here so they no longer conflict with the
+ * custom shell layout. This file keeps the general reset and base typography,
+ * while the custom navbar/sidebar styles live in the dedicated UI shell files.
+ */
 * {
     box-sizing: border-box;
 }
@@ -42,20 +49,9 @@ button:hover {
     cursor: pointer;
 }
 
-.app-shell {
-    display: grid;
-    grid-template-columns: 300px minmax(0, 1fr);
-    min-height: 100vh;
-}
-
-.app-main {
-    padding: 1.6rem;
-    min-width: 0;
-}
-
 .route-page {
     display: grid;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 .route-page__hero {
@@ -282,7 +278,7 @@ button:hover {
 
 .mental-health-page {
     display: grid;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 .mental-health-hero {
@@ -569,160 +565,13 @@ button:hover {
     box-shadow: 0 16px 30px rgba(15, 122, 101, 0.24);
 }
 
-.sidebar-shell {
-    padding: 1rem;
-}
-
-.sidebar-shell__inner {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: calc(100vh - 2rem);
-    padding: 1.1rem;
-    border-radius: 1.8rem;
-    border: 1px solid rgba(148, 163, 184, 0.16);
-    background:
-        linear-gradient(180deg, rgba(8, 30, 27, 0.95) 0%, rgba(13, 41, 36, 0.94) 100%);
-    box-shadow: 0 26px 60px rgba(8, 30, 27, 0.18);
-    color: #dbe9e4;
-}
-
-.brand-block {
-    display: flex;
-    gap: 0.85rem;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding: 0.35rem 0.2rem 0.8rem;
-}
-
-.brand-block__icon {
-    display: grid;
-    place-items: center;
-    width: 2.7rem;
-    height: 2.7rem;
-    border-radius: 0.95rem;
-    background: linear-gradient(145deg, #1fd3a7, #0f7a65);
-    color: #effff9;
-    box-shadow: 0 12px 24px rgba(15, 122, 101, 0.32);
-}
-
-.brand-block h1 {
-    margin: 0;
-    font-size: 1.15rem;
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-}
-
-.brand-block p {
-    margin: 0.25rem 0 0;
-    color: rgba(219, 233, 228, 0.7);
-    font-size: 0.9rem;
-}
-
-.sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-}
-
-.sidebar-nav__item {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    width: 100%;
-    padding: 0.88rem 0.95rem;
-    border-radius: 1rem;
-    color: rgba(219, 233, 228, 0.82);
-    text-align: left;
-    text-decoration: none;
-    transition: transform 160ms ease, background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
-}
-
-.sidebar-nav__item:hover {
-    background: rgba(255, 255, 255, 0.06);
-    transform: translateX(2px);
-}
-
-.sidebar-nav__item.is-active {
-    background: linear-gradient(135deg, rgba(31, 211, 167, 0.18), rgba(20, 144, 111, 0.3));
-    color: #f3fffb;
-    box-shadow: inset 0 0 0 1px rgba(112, 243, 202, 0.18);
-}
-
-.sidebar-nav__icon {
-    display: grid;
-    place-items: center;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 0.8rem;
-    background: rgba(255, 255, 255, 0.06);
-    color: inherit;
-    flex: 0 0 auto;
-}
-
-.sidebar-footer {
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-    padding-top: 1rem;
-}
-
-.sidebar-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.65rem;
-    width: 100%;
-    padding: 0.95rem 1rem;
-    border-radius: 1rem;
-    background: linear-gradient(135deg, #1fd3a7, #0f7a65);
-    color: white;
-    font-weight: 700;
-    box-shadow: 0 18px 30px rgba(15, 122, 101, 0.28);
-}
-
-.sidebar-utility-links {
-    display: grid;
-    gap: 0.35rem;
-}
-
-.sidebar-utility-link {
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    width: 100%;
-    padding: 0.82rem 0.9rem;
-    border-radius: 0.95rem;
-    color: rgba(219, 233, 228, 0.8);
-    text-decoration: none;
-    transition: background-color 160ms ease, color 160ms ease;
-    text-align: left;
-}
-
-.sidebar-utility-link:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: #ffffff;
-}
-
 @media (max-width: 1100px) {
-    .app-shell {
-        grid-template-columns: 1fr;
-    }
-
     .route-page__grid {
         grid-template-columns: 1fr;
     }
 
     .map-grid {
         grid-template-columns: 1fr;
-    }
-
-    .sidebar-shell {
-        padding-bottom: 0;
-    }
-
-    .sidebar-shell__inner {
-        min-height: auto;
     }
 
     .app-main__hero {
@@ -764,15 +613,6 @@ button:hover {
 }
 
 @media (max-width: 720px) {
-    .app-main {
-        padding: 1rem;
-    }
-
-    .sidebar-shell {
-        padding: 0.75rem;
-    }
-
-    .sidebar-shell__inner,
     .app-main__hero,
     .route-page__hero,
     .route-card {

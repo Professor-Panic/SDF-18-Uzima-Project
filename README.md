@@ -277,26 +277,6 @@ Uzima currently uses **in-memory mock services** rather than a backend.
 `src/Medication/medicationsService.js` provides the equivalent mock functionality for medication data.
 
 These services are intentionally structured so they can later be replaced with real API calls.
-
-### Moving to a backend
-
-When integrating a backend, consider:
-
-1.  Replacing mock service functions with HTTP requests.
-    
-2.  Moving persistent data to a database.
-    
-3.  Adding authentication and authorization.
-    
-4.  Validating data on both client and server.
-    
-5.  Handling loading, error, and offline states.
-    
-6.  Replacing client-generated IDs with backend-generated IDs.
-    
-
-----------
-
 ## 🗺️ Map Data
 
 The service map uses Leaflet and fetches healthcare facility data from an external GeoJSON endpoint.
@@ -318,7 +298,7 @@ Longitude: 36.81667
 
 To change the initial location or zoom level, update the corresponding Leaflet map configuration in `src/Map/Map.jsx`.
 
-If the external GeoJSON service becomes unavailable, the map may not display facility data. For production deployments, consider using a reliable API or hosting the required dataset yourself.
+If the external GeoJSON service becomes unavailable, the map loads data from a json
 
 ----------
 
@@ -376,106 +356,19 @@ Before using the feature in a production environment:
 **Do not rely on the application as an emergency service.**
 
 ----------
-
-## 🧪 Testing
-
-Automated tests are not currently included.
-
-For a growing codebase, consider adding:
-
--   **Vitest** for unit and integration testing
-    
--   **React Testing Library** for component behavior
-    
--   End-to-end testing for important user journeys
-    
--   Tests for appointment and medication service logic
-    
--   Tests for map loading and error states
-    
--   Safety-focused tests for the mental-health companion
-    
-
-Example future test structure:
-
-```text
-src/
-├── Appointments/
-│   ├── ...
-│   └── __tests__/
-├── Medication/
-│   ├── ...
-│   └── __tests__/
-└── Chatbot/
-    ├── ...
-    └── __tests__/
-
-```
-
-----------
-
 ## 🏗️ Production Build & Deployment
 
 Uzima is a client-side single-page application and can be deployed to most static hosting platforms.
 
 Build the application with:
-
+``` install all packages
+ npm install
 ```bash
-npm run build
+npm run dev
 
 ```
 
-Then deploy the generated:
 
-```text
-dist/
-
-```
-
-directory.
-
-Compatible hosting options include:
-
--   Netlify
-    
--   Vercel
-    
--   GitHub Pages
-    
--   AWS S3 + CloudFront
-    
--   Other static hosting providers
-    
-
-### SPA routing
-
-Because the application uses client-side routing, configure the hosting provider to serve `index.html` for unknown application routes. Without this fallback, directly visiting routes such as `/appointments` or `/mental-health` may result in a 404 after deployment.
-
-----------
-
-## 🔐 Environment Variables & Secrets
-
-The current project does not require a backend or authentication service.
-
-If you introduce external APIs, configure sensitive or environment-specific values through Vite environment variables rather than committing credentials to the repository.
-
-For example:
-
-```text
-.env.local
-
-```
-
-and:
-
-```env
-VITE_API_BASE_URL=...
-
-```
-
-Never commit API keys, access tokens, passwords, or other secrets to source control.
-
-----------
 
 ## 🤝 Contributing
 
@@ -495,11 +388,6 @@ A typical workflow is:
     
 6.  Open a pull request with a clear description of the changes.
     
-
-For UI/UX changes, include screenshots or a short explanation where useful.
-
-If you introduce a new API, environment variable, dependency, or architectural pattern, update this README accordingly.
-
 ----------
 
 ## 📌 Roadmap Ideas
@@ -526,20 +414,9 @@ Potential improvements include:
     
 -   Add environment-based API configuration
     
--   Add CI/CD checks
-    
--   Add a production license
-    
 
 ----------
 
-## 📄 License
-
-No license is currently included with the project.
-
-If you intend to distribute or open-source Uzima, add a `LICENSE` file containing the terms under which others may use, modify, and distribute the project.
-
-----------
 
 ## 📬 Project Status
 

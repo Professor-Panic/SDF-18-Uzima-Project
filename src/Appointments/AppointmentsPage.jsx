@@ -172,7 +172,7 @@ function AppointmentPage() {
          {/* Below the Navbar on the right*/}
          <div className="appointment-column">
             <div className="appointment-column__header">
-               <h3>Today's Meds</h3>
+               <h3 style={{ color: "white" }}>Today's Meds</h3>
                <button
                   className="appointment-btn appointment-btn--outline"
                   onClick={() => setShowMedicationForm(!showMedicationForm)}

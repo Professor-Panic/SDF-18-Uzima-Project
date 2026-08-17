@@ -1,144 +1,194 @@
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
+
 import { buildGoogleCalendarUrl } from "./googleCalendar";
+import {
+   getSelectableTimeRange,
+   validateRequiredText,
+   toUserMessage,
+} from "./FormValidation";
 
-// Form for logging a new appointment.
-export default function AddAppointmentForm({ onAdd, initialDateTime }) {
-  const [clinicNameManual, setClinicNameManual] = useState("");
-  const [dateTime, setDateTime] = useState(initialDateTime ?? null);
-  const [reason, setReason] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [addToGoogleCalendar, setAddToGoogleCalendar] = useState(false);
-  const [error, setError] = useState(null);
+// Form for logging a new appointment, also reused for editing an existing one.
 
-  // whenever the parent hands us a new prefilled date (e.g. from clicking
-  // a day on the calendar), reflect it in the form
-  useEffect(() => {
-    setDateTime(initialDateTime ?? null);
-  }, [initialDateTime]);
+export default function AddAppointmentForm({
+   onAdd,
+   onUpdate,
+   editingAppointment,
+   initialDateTime,
+}) {
+   const [clinicNameManual, setClinicNameManual] = useState("");
+   const [dateTime, setDateTime] = useState(initialDateTime ?? null);
+   const [reason, setReason] = useState("");
+   const [submitting, setSubmitting] = useState(false);
+   const [addToGoogleCalendar, setAddToGoogleCalendar] = useState(false);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setError(null);
+   // Holds a user-facing message when validation fails or the save itself fails (network/server error) — shown inline instead of failing silently.
+   const [formError, setFormError] = useState(null);
 
-    // If clinic name or date/time is empty, stop the function right there
-    if (!clinicNameManual || !dateTime) {
-      setError("Please fill in all required fields");
-      return;
-    }
+   // true whenever we were handed an appointment to edit, false when adding a new one
+   const isEditing = Boolean(editingAppointment);
 
-    setSubmitting(true);
-    try {
-      // Create the appointment object
-      const appointmentData = { 
-        clinicNameManual, 
-        dateTime, 
-        reason 
-      };
-      
-      // Call the parent's onAdd function and wait for it to complete
-      const result = await onAdd(appointmentData);
-      
-      // Optional: Log success for debugging
-      console.log("Appointment added successfully:", result);
-
-      // Open Google Calendar's prefilled "add event" screen in a new tab
-      if (addToGoogleCalendar) {
-        window.open(
-          buildGoogleCalendarUrl({ clinicNameManual, dateTime, reason }),
-          "_blank",
-        );
+   // Whenever the parent hands us an appointment to edit, fill the form with its current values. When there's nothing to edit, fall back to whatever prefilled date the calendar click supplied
+   useEffect(() => {
+      if (editingAppointment) {
+         setClinicNameManual(editingAppointment.clinicNameManual);
+         setDateTime(new Date(editingAppointment.dateTime));
+         setReason(editingAppointment.reason || "");
+      } else {
+         setClinicNameManual("");
+         setDateTime(initialDateTime ?? null);
+         setReason("");
       }
 
-      // Clear form fields after successful submission
-      setClinicNameManual("");
-      setDateTime(null);
-      setReason("");
-      setAddToGoogleCalendar(false);
-      
-    } catch (error) {
-      console.error("Failed to add appointment:", error);
-      setError("Failed to add appointment. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  }
+      // switching between add/edit (or between two different appointments to edit) should always clear out any leftover error from a previous attempt
+      setFormError(null);
+   }, [editingAppointment, initialDateTime]);
 
-  // The form
-  return (
-    <div>
-      <form className="styled-form" onSubmit={handleSubmit}>
-        <h3>Add an appointment</h3>
-        
-        {/* Show error if any */}
-        {error && (
-          <div className="form-error" style={{ 
-            color: '#9f1239', 
-            background: 'rgba(220,38,38,0.06)', 
-            padding: '0.75rem', 
-            borderRadius: '0.7rem',
-            marginBottom: '1rem',
-            border: '1px solid rgba(220,38,38,0.12)'
-          }}>
-            {error}
-          </div>
-        )}
-        
-        {/* Clinic name */}
-        <label className="form-field">
-          <span>Clinic / Provider name</span>
-          <input
-            type="text"
-            value={clinicNameManual}
-            onChange={(e) => setClinicNameManual(e.target.value)}
-            placeholder="e.g. Cascade Mental Wellness"
-            required
-          />
-        </label>
-        
-        {/* Date & Time */}
-        <div className="form-field">
-          <span>Date & Time</span>
-          <DatePicker
-            selected={dateTime}
-            onChange={(date) => setDateTime(date)}
-            showTimeSelect
-            dateFormat="MMM d, yyyy h:mm aa"
-            placeholderText="Select date & time"
-            className="datetime-trigger"
-            required
-            formatWeekDay={(day) => day.charAt(0)}
-          />
-        </div>
-        
-        {/* Reason */}
-        <label className="form-field">
-          <span>Reason</span>
-          <input
-            type="text"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            placeholder="e.g., Follow-up checkup"
-          />
-        </label>
+   // The appointment's original time, if we're editing one gets included
+   const originalTime = editingAppointment
+      ? new Date(editingAppointment.dateTime)
+      : null;
+   const { minTime, maxTime } = getSelectableTimeRange(dateTime, originalTime);
 
-        <label className="form-checkbox">
-          <input
-            type="checkbox"
-            checked={addToGoogleCalendar}
-            onChange={(e) => setAddToGoogleCalendar(e.target.checked)}
-          />
-          <span>Also add to Google Calendar</span>
-        </label>
-        
-        <button
-          className="appointment-btn appointment-btn--primary"
-          type="submit"
-          disabled={submitting}
-        >
-          {submitting ? "Adding..." : "Add appointment"}
-        </button>
-      </form>
-    </div>
-  );
+   async function handleSubmit(e) {
+      e.preventDefault();
+      setFormError(null);
+
+      // Real validation instead of relying solely on the browser's native `required`
+      const nameError = validateRequiredText(clinicNameManual, "Clinic name");
+      if (nameError) {
+         setFormError(nameError);
+         return;
+      }
+      if (!dateTime) {
+         setFormError("Please select a date & time.");
+         return;
+      }
+
+      setSubmitting(true);
+      try {
+         if (isEditing) {
+            // Editing: overwrite the existing appointment's details.
+            await onUpdate(editingAppointment.id, {
+               clinicNameManual: clinicNameManual.trim(),
+               dateTime,
+               reason: reason.trim(),
+            });
+         } else {
+            // Adding: create a brand new appointment.
+            await onAdd({
+               clinicNameManual: clinicNameManual.trim(),
+               dateTime,
+               reason: reason.trim(),
+            });
+
+            // open Google Calendar's prefilled "add event" screen in a new tab,<optional>
+            if (addToGoogleCalendar) {
+               window.open(
+                  buildGoogleCalendarUrl({
+                     clinicNameManual,
+                     dateTime,
+                     reason,
+                  }),
+                  "_blank",
+               );
+            }
+         }
+
+         setClinicNameManual("");
+         setDateTime(null);
+         setReason("");
+         setAddToGoogleCalendar(false);
+      } catch (error) {
+         // Inform the user of a failed save instead of only logging it
+         console.error("Failed to save appointment:", error);
+         setFormError(
+            toUserMessage(
+               error,
+               "Couldn't save this appointment. Please try again.",
+            ),
+         );
+      } finally {
+         setSubmitting(false);
+      }
+   }
+
+   //The form
+   return (
+      <div>
+         <form className="styled-form" onSubmit={handleSubmit}>
+            <h3>{isEditing ? "Edit appointment" : "Add an appointment"}</h3>
+
+            {formError && <p className="form-error">{formError}</p>}
+
+            {/* clinicNameManual */}
+            <label className="form-field">
+               <span>Clinic / Provider name</span>
+               <input
+                  type="text"
+                  value={clinicNameManual}
+                  onChange={(e) => setClinicNameManual(e.target.value)}
+                  placeholder="e.g. Cascade Menta Wellness"
+                  maxLength={120} // soft cap so a pasted paragraph can't blow out the card layout
+                  required
+               />
+            </label>
+
+            {/* Date & Time */}
+            <div className="form-field">
+               <span>Date & Time</span>
+               <DatePicker
+                  selected={dateTime} //tells the picker which date is currently chosen
+                  onChange={(date) => setDateTime(date)}
+                  showTimeSelect //merges date-picking and time-picking into a single popover
+                  minDate={new Date()} // can't pick a date that's already passed
+                  minTime={minTime} // if today is selected, can't pick a time earlier than right now
+                  maxTime={maxTime} // paired with minTime — react-datepicker requires both when either is set
+                  dateFormat="MMM d, yyyy h:mm aa"
+                  placeholderText="Select date & time"
+                  className="datetime-trigger"
+                  required
+                  formatWeekDay={(day) => day.charAt(0)}
+               />
+            </div>
+
+            {/* Reason */}
+            <label className="form-field">
+               <span>Reason</span>
+               <input
+                  type="text"
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  maxLength={200}
+               />
+            </label>
+
+            {/* Only offered when adding a NEW appointment  */}
+            {!isEditing && (
+               <label className="form-checkbox">
+                  <input
+                     type="checkbox"
+                     checked={addToGoogleCalendar}
+                     onChange={(e) => setAddToGoogleCalendar(e.target.checked)}
+                  />
+                  <span>Also add to Google Calendar</span>
+               </label>
+            )}
+
+            <button
+               className="appointment-btn appointment-btn--primary"
+               type="submit"
+               disabled={submitting}
+            >
+               {/* //preventing a double-submit if someone clicks twice quickly. */}
+               {submitting
+                  ? "Saving..."
+                  : isEditing
+                    ? "Save changes"
+                    : "Add appointment"}
+            </button>
+            {/* //fallback logic. Shows different button text depending on state. */}
+         </form>
+      </div>
+   );
 }

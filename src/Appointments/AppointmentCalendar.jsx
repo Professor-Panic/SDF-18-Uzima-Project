@@ -31,6 +31,7 @@ export default function AppointmentCalendar({
          selected={selectedDate}
          onChange={handleChange}
          inline
+         minDate={new Date()} // greys out and disables clicking any day before today
          formatWeekDay={(day) => day.charAt(0)}
          calendarClassName="main-calendar"
          renderDayContents={(day, date) => (

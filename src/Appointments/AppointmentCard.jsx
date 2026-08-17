@@ -17,13 +17,15 @@ function formatDateTime(isoString) {
    );
 }
 
-function AppointmentCard({ appointment, onUpdateStatus, onDelete }) {
+function AppointmentCard({ appointment, onUpdateStatus, onDelete, onEdit }) {
    //Incase the appointment passes and status wasn't changed then we should prompt user so the status can be changed accurately
    const isPast = new Date(appointment.dateTime) < new Date();
    let confirmationPrompt = null;
 
    const [menuOpen, setMenuOpen] = useState(false);
    const [confirmingDelete, setConfirmingDelete] = useState(false);
+   // Tracks the delete request actually in flight, so a slow network/ a second click on "Delete" can't fire onDelete twice for the same card.
+   const [deleting, setDeleting] = useState(false);
    const menuRef = useRef(null);
 
    // close the kebab menu if the user clicks anywhere outside of it
@@ -33,7 +35,6 @@ function AppointmentCard({ appointment, onUpdateStatus, onDelete }) {
             setMenuOpen(false);
          }
       }
-
       document.addEventListener("mousedown", handleClickOutside);
       return () =>
          document.removeEventListener("mousedown", handleClickOutside);
@@ -42,7 +43,7 @@ function AppointmentCard({ appointment, onUpdateStatus, onDelete }) {
    if (appointment.status === "upcoming" && isPast) {
       confirmationPrompt = (
          <div>
-            <p>Did you make it to this appointment?</p>
+            <p>Did you make it to this one?</p>
             <button onClick={() => onUpdateStatus(appointment.id, "completed")}>
                Yes
             </button>
@@ -51,6 +52,18 @@ function AppointmentCard({ appointment, onUpdateStatus, onDelete }) {
             </button>
          </div>
       );
+   }
+
+   async function handleConfirmDelete() {
+      if (deleting) return; // already in flight — ignore extra clicks
+      setDeleting(true);
+      try {
+         await onDelete(appointment.id);
+         // no need to reset `deleting` on success
+      } catch (error) {
+         console.error("Failed to delete appointment:", error);
+         setDeleting(false); // let them retry if it actually failed
+      }
    }
 
    return (
@@ -67,6 +80,16 @@ function AppointmentCard({ appointment, onUpdateStatus, onDelete }) {
 
             {menuOpen && (
                <div className="appointment-dropdown" role="menu">
+                  <button
+                     role="menuitem"
+                     className="appointment-dropdown-item"
+                     onClick={() => {
+                        setMenuOpen(false);
+                        onEdit(appointment);
+                     }}
+                  >
+                     Edit appointment
+                  </button>
                   <button
                      role="menuitem"
                      className="appointment-dropdown-item appointment-dropdown-item--danger"
@@ -108,14 +131,15 @@ function AppointmentCard({ appointment, onUpdateStatus, onDelete }) {
                <div className="appointment-confirm-actions">
                   <button
                      className="appointment-delete-confirm-btn"
-                     onClick={() => {
-                        onDelete(appointment.id);
-                        setConfirmingDelete(false);
-                     }}
+                     onClick={handleConfirmDelete}
+                     disabled={deleting}
                   >
-                     Delete
+                     {deleting ? "Deleting..." : "Delete"}
                   </button>
-                  <button onClick={() => setConfirmingDelete(false)}>
+                  <button
+                     onClick={() => setConfirmingDelete(false)}
+                     disabled={deleting}
+                  >
                      Cancel
                   </button>
                </div>

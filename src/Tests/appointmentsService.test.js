@@ -4,7 +4,7 @@ import {
    addAppointment,
    updateAppointmentStatus,
    deleteAppointment,
-} from "./appointmentsService";
+} from "../Appointments/appointmentsService";
 
 const USER_ID = "user_123";
 

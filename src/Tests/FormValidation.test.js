@@ -3,7 +3,7 @@ import {
    isSameDay,
    validateRequiredText,
    validateQuantity,
-} from "./FormValidation.test";
+} from "../Appointments/FormValidation";
 
 describe("isSameDay", () => {
    it("returns true for two dates on the same calendar day", () => {

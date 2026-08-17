@@ -10,8 +10,8 @@
   gap: 1rem;
   padding: 1.5rem;
   border-radius: 1.5rem;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
 }
 
@@ -20,18 +20,19 @@
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.14em;
-  color: #5e8579;
+  color: #4a7a6b;
 }
 
 .dashboard-hero h1 {
   margin: 0;
   font-size: clamp(2rem, 3vw, 3.2rem);
   letter-spacing: -0.04em;
+  color: #0a1a16;
 }
 
 .dashboard-subtitle {
   margin: 0.75rem 0 0;
-  color: #5d6e68;
+  color: #4a6a60;
 }
 
 .dashboard-date {
@@ -46,7 +47,7 @@
 
 .dashboard-date span {
   font-size: 0.8rem;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .dashboard-stats {
@@ -60,8 +61,8 @@
   gap: 1rem;
   padding: 1.2rem;
   border-radius: 1.4rem;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
 }
 
@@ -72,22 +73,23 @@
   height: 3rem;
   font-size: 1.4rem;
   border-radius: 1rem;
-  background: rgba(15, 122, 101, 0.1);
+  background: rgba(15, 122, 101, 0.08);
 }
 
 .stat-card p {
   margin: 0;
-  color: #5d6e68;
+  color: #4a6a60;
 }
 
 .stat-card h2 {
   margin: 0.25rem 0;
   font-size: 1.8rem;
+  color: #0a1a16;
 }
 
 .stat-card span {
   font-size: 0.8rem;
-  color: #5e8579;
+  color: #4a7a6b;
 }
 
 .dashboard-grid {
@@ -99,13 +101,14 @@
 .dashboard-panel {
   padding: 1.3rem;
   border-radius: 1.5rem;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
 }
 
 .dashboard-panel h2 {
   margin: 0;
+  color: #0a1a16;
 }
 
 .quick-actions {
@@ -120,12 +123,13 @@
   gap: 1rem;
   padding: 1rem;
   border-radius: 1rem;
-  background: rgba(15, 122, 101, 0.05);
+  background: rgba(255, 255, 255, 0.6);
   transition: transform 0.2s ease, background 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .quick-action:hover {
-  background: rgba(15, 122, 101, 0.1);
+  background: rgba(255, 255, 255, 0.9);
   transform: translateX(4px);
 }
 
@@ -135,17 +139,18 @@
   width: 3rem;
   height: 3rem;
   border-radius: 0.9rem;
-  background: rgba(15, 122, 101, 0.1);
+  background: rgba(15, 122, 101, 0.08);
   font-size: 1.3rem;
 }
 
 .quick-action h3 {
   margin: 0;
+  color: #0a1a16;
 }
 
 .quick-action p {
   margin: 0.3rem 0 0;
-  color: #5d6e68;
+  color: #4a6a60;
   font-size: 0.9rem;
 }
 
@@ -159,9 +164,10 @@
   background:
     linear-gradient(
       135deg,
-      rgba(15, 122, 101, 0.14),
-      rgba(255, 255, 255, 0.8)
+      rgba(15, 122, 101, 0.06),
+      rgba(255, 255, 255, 0.95)
     );
+  border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 .mood-options {
@@ -175,16 +181,18 @@
   padding: 0.65rem;
   font-size: 1.5rem;
   border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.5);
   transition: transform 0.2s ease, background 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .mood-options button:hover {
-  background: rgba(15, 122, 101, 0.1);
+  background: rgba(255, 255, 255, 0.9);
   transform: scale(1.15);
 }
 
 .wellness-text {
-  color: #5d6e68;
+  color: #4a6a60;
   line-height: 1.6;
 }
 

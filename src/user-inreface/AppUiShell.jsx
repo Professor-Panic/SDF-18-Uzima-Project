@@ -1,9 +1,9 @@
 /**
  * AppUiShell
  *
- * This component wraps the entire app with the custom glassmorphism layout:
- * - sticky translucent navbar
- * - hover-enabled left sidebar
+ * This component wraps the entire app with the custom layout:
+ * - horizontal sidebar at the top
+ * - hover-enabled left sidebar (optional)
  * - settings modal for the sidebar toggle
  * - responsive spacing so the content remains clear and readable across screen sizes
  */
@@ -21,21 +21,11 @@ const navItems = [
 ];
 
 export function AppUiShell({ children }) {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [hoverEnabled, setHoverEnabled] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [sidebarHovering, setSidebarHovering] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 18);
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     if (!hoverEnabled || window.innerWidth <= 760) {
@@ -67,7 +57,8 @@ export function AppUiShell({ children }) {
 
   return (
     <div className="ui-shell">
-      <header className={`ui-navbar ${isScrolled ? "is-scrolled" : ""}`}>
+      {/* Horizontal Navbar at top */}
+      <header className="ui-navbar ui-navbar--horizontal">
         <div className="ui-navbar__brand">
           <div className="ui-brand-mark">
             <Sparkles size={16} />
@@ -111,6 +102,7 @@ export function AppUiShell({ children }) {
         </div>
       </header>
 
+      {/* Left Sidebar - hidden by default, appears on hover or click */}
       <aside
         className={`ui-sidebar ${sidebarVisible ? "is-open" : "is-collapsed"}`}
         onMouseEnter={() => {
@@ -154,6 +146,7 @@ export function AppUiShell({ children }) {
         </div>
       </aside>
 
+      {/* Main content */}
       <main className={`ui-main ${sidebarVisible ? "ui-main--shifted" : ""}`}>{children}</main>
 
       <SettingsPanel

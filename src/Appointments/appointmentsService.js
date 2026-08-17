@@ -33,7 +33,7 @@ let mockAppointments = [
 ];
 
 // Simulates the time it takes to talk to a real database incase of bugs
-const fakeDelay = (ms = 500) =>
+const fakeDelay = (ms = 5) =>
    new Promise((resolve) => setTimeout(resolve, ms));
 
 // Fetches all appointments belonging to a specific user, soonest first.

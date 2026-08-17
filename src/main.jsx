@@ -28,6 +28,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/dashboard" element={<Header />} />
           <Route path="/appointments" element={<AppointmentPage />} />
           <Route path="/map" element={<ShowMap />} />
+          <Route path="*" element={<Header />} />
           <Route
             path="/mental-health"
             element={<MentalHealthPage />}

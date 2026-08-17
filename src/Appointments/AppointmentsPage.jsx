@@ -115,7 +115,7 @@ function AppointmentPage() {
    const morningMeds = medications.filter((m) => m.timeLabel === "Morning");
    const eveningMeds = medications.filter((m) => m.timeLabel === "Evening");
 
-   if (loading) return <p>Loading your schedule…</p>;
+   if (loading) return <p style={{ color: "white" }}>Loading your schedule…</p>;
 
    return (
       //Main div
@@ -123,7 +123,7 @@ function AppointmentPage() {
          {/* Below the Navbar on the left*/}
          <div className="appointment-column">
             <div className="appointment-column__header">
-               <h3>Upcoming Appointments</h3>
+               <h3 style={{ color: "white" }}>Upcoming Appointments</h3>
                <button
                   className="appointment-btn appointment-btn--primary"
                   // onClick={() => setShowAppointmentForm(!showAppointmentForm)}
@@ -155,7 +155,7 @@ function AppointmentPage() {
             <div>
                {/* Appointment List */}
                {appointments.length === 0 ? (
-                  <p>No appointments yet.</p>
+                  <p style={{ color: "white" }}>No appointments yet.</p>
                ) : (
                   appointments.map((appointment) => (
                      <AppointmentCard
@@ -172,7 +172,7 @@ function AppointmentPage() {
          {/* Below the Navbar on the right*/}
          <div className="appointment-column">
             <div className="appointment-column__header">
-               <h3>Today's Meds</h3>
+               <h3 style={{ color: "white" }}>Today's Meds</h3>
                <button
                   className="appointment-btn appointment-btn--outline"
                   onClick={() => setShowMedicationForm(!showMedicationForm)}

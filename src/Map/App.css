@@ -1,441 +1,441 @@
-/* =========================
-   UZIMA MAP PAGE
-   ========================= */
-
-.map-workspace {
-    display: grid;
-    gap: 1rem;
-    min-width: 0;
-}
-
-
-/* =========================
-   MAP CONTAINER
-   ========================= */
-
-.map-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 360px;
-    gap: 1rem;
-    align-items: stretch;
-}
-
-.map-panel {
-    min-height: 72vh;
-    padding: 0.9rem;
-    border-radius: 1.6rem;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(15, 122, 101, 0.08),
-            rgba(255, 255, 255, 0.75)
-        );
-
-    border: 1px solid rgba(148, 163, 184, 0.16);
-
-    box-shadow:
-        0 18px 45px rgba(15, 23, 42, 0.06),
-        inset 0 1px 0 rgba(255, 255, 255, 0.7);
-
-    overflow: hidden;
-}
-
-
-/* =========================
-   LEAFLET MAP
-   ========================= */
-
-#map {
-    width: 100%;
-    height: 100%;
-    min-height: calc(72vh - 1.8rem);
-
-    border-radius: 1.15rem;
-    overflow: hidden;
-
-    border: 1px solid rgba(15, 122, 101, 0.12);
-
-    box-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, 0.3);
-}
-
-
-/* Leaflet controls */
-
-.leaflet-control-zoom {
-    border: none !important;
-
-    border-radius: 0.9rem !important;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 10px 25px rgba(15, 23, 42, 0.14) !important;
-}
-
-.leaflet-control-zoom a {
-    width: 38px !important;
-    height: 38px !important;
-
-    line-height: 38px !important;
-
-    border: none !important;
-
-    background: rgba(255, 255, 255, 0.95) !important;
-
-    color: #0f7a65 !important;
-
-    font-size: 1.3rem !important;
-
-    transition:
-        background 160ms ease,
-        color 160ms ease;
-}
-
-.leaflet-control-zoom a:hover {
-    background: #0f7a65 !important;
-    color: white !important;
-}
-
-
-/* Popup */
-
-.leaflet-popup-content-wrapper {
-    border-radius: 1rem !important;
-
-    background: rgba(255, 255, 255, 0.96) !important;
-
-    box-shadow:
-        0 15px 35px rgba(15, 23, 42, 0.16) !important;
-}
-
-.leaflet-popup-content {
-    margin: 1rem 1.1rem !important;
-
-    font-family:
-        "Avenir Next",
-        "Trebuchet MS",
-        "Segoe UI",
-        sans-serif;
-
-    color: #11211d;
-}
-
-.leaflet-popup-content strong {
-    display: block;
-
-    margin-bottom: 0.35rem;
-
-    color: #0f7a65;
-
-    font-size: 1rem;
-}
-
-.leaflet-popup-tip {
-    background: white !important;
-}
-
-
-/* =========================
-   NEARBY FACILITIES PANEL
-   ========================= */
-
-.distance-panel {
-    display: flex;
-    flex-direction: column;
-
-    gap: 1rem;
-
-    min-height: 72vh;
-
-    padding: 1.1rem;
-
-    border-radius: 1.6rem;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.82),
-            rgba(240, 248, 245, 0.72)
-        );
-
-    border: 1px solid rgba(148, 163, 184, 0.14);
-
-    box-shadow:
-        0 18px 45px rgba(15, 23, 42, 0.06);
-
-    backdrop-filter: blur(18px);
-}
-
-
-/* Header */
-
-.distance-panel__header {
-    padding-bottom: 0.9rem;
-
-    border-bottom:
-        1px solid rgba(15, 122, 101, 0.1);
-}
-
-.distance-panel__eyebrow {
-    margin: 0 0 0.35rem;
-
-    color: #5e8579;
-
-    font-size: 0.72rem;
-
-    font-weight: 700;
-
-    letter-spacing: 0.14em;
-}
-
-.distance-panel__header h2 {
-    margin: 0;
-
-    color: #11211d;
-
-    font-size: 1.3rem;
-
-    letter-spacing: -0.03em;
-}
-
-.distance-panel__copy {
-    margin: 0.55rem 0 0;
-
-    color: #5d6e68;
-
-    font-size: 0.9rem;
-
-    line-height: 1.55;
-}
-
-
-/* =========================
-   FACILITY LIST
-   ========================= */
-
-.hos-distances-list {
-    display: grid;
-
-    gap: 0.7rem;
-
-    margin: 0;
-
-    padding: 0;
-
-    list-style: none;
-
-    overflow-y: auto;
-
-    max-height: calc(72vh - 10rem);
-
-    scrollbar-width: thin;
-}
-
-
-/* Individual facility */
-
-.hos-distances {
-    display: grid;
-
-    grid-template-columns:
-        minmax(0, 1fr)
-        auto;
-
-    gap: 0.35rem 1rem;
-
-    align-items: center;
-
-    padding: 1rem;
-
-    border-radius: 1rem;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(15, 122, 101, 0.07),
-            rgba(15, 122, 101, 0.025)
-        );
-
-    border:
-        1px solid rgba(15, 122, 101, 0.1);
-
-    transition:
-        transform 160ms ease,
-        background 160ms ease,
-        box-shadow 160ms ease;
-}
-
-.hos-distances:hover {
-    transform: translateY(-2px);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(15, 122, 101, 0.12),
-            rgba(15, 122, 101, 0.05)
-        );
-
-    box-shadow:
-        0 10px 22px rgba(15, 122, 101, 0.1);
-}
-
-
-/* Facility name */
-
-.hos-distances p:first-child {
-    margin: 0;
-
-    font-weight: 700;
-
-    color: #11211d;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-}
-
-
-/* Facility type */
-
-.hos-distances p:nth-child(2) {
-    grid-column: 1;
-
-    margin: 0;
-
-    color: #5d6e68;
-
-    font-size: 0.82rem;
-}
-
-
-/* Distance */
-
-.hos-distances p:last-child {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-
-    margin: 0;
-
-    padding: 0.45rem 0.7rem;
-
-    border-radius: 999px;
-
-    background: rgba(15, 122, 101, 0.12);
-
-    color: #0f7a65;
-
-    font-size: 0.82rem;
-
-    font-weight: 700;
-
-    font-variant-numeric: tabular-nums;
-
-    white-space: nowrap;
-}
-
-
-/* =========================
-   ERROR MESSAGE
-   ========================= */
-
-.facility-load-error {
-    margin: 0;
-
-    padding: 1rem 1.1rem;
-
-    border-radius: 1rem;
-
-    background: rgba(220, 38, 38, 0.08);
-
-    border:
-        1px solid rgba(220, 38, 38, 0.18);
-
-    color: #991b1b;
-
-    font-weight: 600;
-}
-
-
-/* =========================
-   EMPTY STATE
-   ========================= */
-
-.hos-distances--empty {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    min-height: 120px;
-
-    color: #5d6e68;
-
-    text-align: center;
-
-    background: rgba(15, 122, 101, 0.04);
-
-    border:
-        1px dashed rgba(15, 122, 101, 0.18);
-
-    border-radius: 1rem;
-}
-
-
-/* =========================
-   RESPONSIVE
-   ========================= */
-
-@media (max-width: 1100px) {
-    .map-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .map-panel {
-        min-height: 60vh;
-    }
-
-    #map {
-        min-height: calc(60vh - 1.8rem);
-    }
-
-    .distance-panel {
-        min-height: auto;
-    }
-
-    .hos-distances-list {
-        max-height: 400px;
-    }
-}
-
-
-@media (max-width: 720px) {
-    .map-panel,
-    .distance-panel {
-        border-radius: 1.3rem;
-    }
-
-    .map-panel {
-        padding: 0.65rem;
-
-        min-height: 52vh;
-    }
-
-    #map {
-        min-height: calc(52vh - 1.3rem);
-
-        border-radius: 0.95rem;
-    }
-
-    .distance-panel {
-        padding: 1rem;
-    }
-
-    .hos-distances {
-        padding: 0.9rem;
-    }
+/* ========================= 
+   UZIMA MAP PAGE 
+   ========================= */ 
+ 
+.map-workspace { 
+    display: grid; 
+    gap: 1rem; 
+    min-width: 0; 
+} 
+ 
+ 
+/* ========================= 
+   MAP CONTAINER 
+   ========================= */ 
+ 
+.map-grid { 
+    display: grid; 
+    grid-template-columns: minmax(0, 1fr) 360px; 
+    gap: 1rem; 
+    align-items: stretch; 
+} 
+ 
+.map-panel { 
+    min-height: 72vh; 
+    padding: 0.9rem; 
+    border-radius: 1.6rem; 
+ 
+    background: 
+        linear-gradient( 
+            135deg, 
+            rgba(15, 122, 101, 0.05), 
+            rgba(255, 255, 255, 0.92) 
+        ); 
+ 
+    border: 1px solid rgba(255, 255, 255, 0.35); 
+ 
+    box-shadow: 
+        0 18px 45px rgba(15, 23, 42, 0.06), 
+        inset 0 1px 0 rgba(255, 255, 255, 0.9); 
+ 
+    overflow: hidden; 
+} 
+ 
+ 
+/* ========================= 
+   LEAFLET MAP 
+   ========================= */ 
+ 
+#map { 
+    width: 100%; 
+    height: 100%; 
+    min-height: calc(72vh - 1.8rem); 
+ 
+    border-radius: 1.15rem; 
+    overflow: hidden; 
+ 
+    border: 1px solid rgba(255, 255, 255, 0.3); 
+ 
+    box-shadow: 
+        inset 0 0 0 1px rgba(255, 255, 255, 0.5); 
+} 
+ 
+ 
+/* Leaflet controls */ 
+ 
+.leaflet-control-zoom { 
+    border: none !important; 
+ 
+    border-radius: 0.9rem !important; 
+ 
+    overflow: hidden; 
+ 
+    box-shadow: 
+        0 10px 25px rgba(15, 23, 42, 0.14) !important; 
+} 
+ 
+.leaflet-control-zoom a { 
+    width: 38px !important; 
+    height: 38px !important; 
+ 
+    line-height: 38px !important; 
+ 
+    border: none !important; 
+ 
+    background: rgba(255, 255, 255, 1) !important; 
+ 
+    color: #0f7a65 !important; 
+ 
+    font-size: 1.3rem !important; 
+ 
+    transition: 
+        background 160ms ease, 
+        color 160ms ease; 
+} 
+ 
+.leaflet-control-zoom a:hover { 
+    background: #0f7a65 !important; 
+    color: white !important; 
+} 
+ 
+ 
+/* Popup */ 
+ 
+.leaflet-popup-content-wrapper { 
+    border-radius: 1rem !important; 
+ 
+    background: rgba(255, 255, 255, 1) !important; 
+ 
+    box-shadow: 
+        0 15px 35px rgba(15, 23, 42, 0.16) !important; 
+} 
+ 
+.leaflet-popup-content { 
+    margin: 1rem 1.1rem !important; 
+ 
+    font-family: 
+        "Avenir Next", 
+        "Trebuchet MS", 
+        "Segoe UI", 
+        sans-serif; 
+ 
+    color: #11211d; 
+} 
+ 
+.leaflet-popup-content strong { 
+    display: block; 
+ 
+    margin-bottom: 0.35rem; 
+ 
+    color: #0f7a65; 
+ 
+    font-size: 1rem; 
+} 
+ 
+.leaflet-popup-tip { 
+    background: white; 
+} 
+ 
+ 
+/* ========================= 
+   NEARBY FACILITIES PANEL 
+   ========================= */ 
+ 
+.distance-panel { 
+    display: flex; 
+    flex-direction: column; 
+ 
+    gap: 1rem; 
+ 
+    min-height: 72vh; 
+ 
+    padding: 1.1rem; 
+ 
+    border-radius: 1.6rem; 
+ 
+    background: 
+        linear-gradient( 
+            180deg, 
+            rgba(255, 255, 255, 0.98), 
+            rgba(248, 252, 250, 0.95) 
+        ); 
+ 
+    border: 1px solid rgba(255, 255, 255, 0.4); 
+ 
+    box-shadow: 
+        0 18px 45px rgba(15, 23, 42, 0.06); 
+ 
+    backdrop-filter: blur(18px); 
+} 
+ 
+ 
+/* Header */ 
+ 
+.distance-panel__header { 
+    padding-bottom: 0.9rem; 
+ 
+    border-bottom: 
+        1px solid rgba(15, 122, 101, 0.08); 
+} 
+ 
+.distance-panel__eyebrow { 
+    margin: 0 0 0.35rem; 
+ 
+    color: #4a7a6b; 
+ 
+    font-size: 0.72rem; 
+ 
+    font-weight: 700; 
+ 
+    letter-spacing: 0.14em; 
+} 
+ 
+.distance-panel__header h2 { 
+    margin: 0; 
+ 
+    color: #0a1a16; 
+ 
+    font-size: 1.3rem; 
+ 
+    letter-spacing: -0.03em; 
+} 
+ 
+.distance-panel__copy { 
+    margin: 0.55rem 0 0; 
+ 
+    color: #4a6a60; 
+ 
+    font-size: 0.9rem; 
+ 
+    line-height: 1.55; 
+} 
+ 
+ 
+/* ========================= 
+   FACILITY LIST 
+   ========================= */ 
+ 
+.hos-distances-list { 
+    display: grid; 
+ 
+    gap: 0.7rem; 
+ 
+    margin: 0; 
+ 
+    padding: 0; 
+ 
+    list-style: none; 
+ 
+    overflow-y: auto; 
+ 
+    max-height: calc(72vh - 10rem); 
+ 
+    scrollbar-width: thin; 
+} 
+ 
+ 
+/* Individual facility */ 
+ 
+.hos-distances { 
+    display: grid; 
+ 
+    grid-template-columns: 
+        minmax(0, 1fr) 
+        auto; 
+ 
+    gap: 0.35rem 1rem; 
+ 
+    align-items: center; 
+ 
+    padding: 1rem; 
+ 
+    border-radius: 1rem; 
+ 
+    background: 
+        linear-gradient( 
+            135deg, 
+            rgba(15, 122, 101, 0.04), 
+            rgba(255, 255, 255, 0.9) 
+        ); 
+ 
+    border: 
+        1px solid rgba(15, 122, 101, 0.06); 
+ 
+    transition: 
+        transform 160ms ease, 
+        background 160ms ease, 
+        box-shadow 160ms ease; 
+} 
+ 
+.hos-distances:hover { 
+    transform: translateY(-2px); 
+ 
+    background: 
+        linear-gradient( 
+            135deg, 
+            rgba(15, 122, 101, 0.08), 
+            rgba(255, 255, 255, 1) 
+        ); 
+ 
+    box-shadow: 
+        0 10px 22px rgba(15, 122, 101, 0.08); 
+} 
+ 
+ 
+/* Facility name */ 
+ 
+.hos-distances p:first-child { 
+    margin: 0; 
+ 
+    font-weight: 700; 
+ 
+    color: #0a1a16; 
+ 
+    overflow: hidden; 
+ 
+    text-overflow: ellipsis; 
+ 
+    white-space: nowrap; 
+} 
+ 
+ 
+/* Facility type */ 
+ 
+.hos-distances p:nth-child(2) { 
+    grid-column: 1; 
+ 
+    margin: 0; 
+ 
+    color: #4a6a60; 
+ 
+    font-size: 0.82rem; 
+} 
+ 
+ 
+/* Distance */ 
+ 
+.hos-distances p:last-child { 
+    grid-column: 2; 
+    grid-row: 1 / span 2; 
+ 
+    margin: 0; 
+ 
+    padding: 0.45rem 0.7rem; 
+ 
+    border-radius: 999px; 
+ 
+    background: rgba(15, 122, 101, 0.08); 
+ 
+    color: #0f7a65; 
+ 
+    font-size: 0.82rem; 
+ 
+    font-weight: 700; 
+ 
+    font-variant-numeric: tabular-nums; 
+ 
+    white-space: nowrap; 
+} 
+ 
+ 
+/* ========================= 
+   ERROR MESSAGE 
+   ========================= */ 
+ 
+.facility-load-error { 
+    margin: 0; 
+ 
+    padding: 1rem 1.1rem; 
+ 
+    border-radius: 1rem; 
+ 
+    background: rgba(220, 38, 38, 0.06); 
+ 
+    border: 
+        1px solid rgba(220, 38, 38, 0.12); 
+ 
+    color: #991b1b; 
+ 
+    font-weight: 600; 
+} 
+ 
+ 
+/* ========================= 
+   EMPTY STATE 
+   ========================= */ 
+ 
+.hos-distances--empty { 
+    display: flex; 
+ 
+    align-items: center; 
+ 
+    justify-content: center; 
+ 
+    min-height: 120px; 
+ 
+    color: #4a6a60; 
+ 
+    text-align: center; 
+ 
+    background: rgba(255, 255, 255, 0.5); 
+ 
+    border: 
+        1px dashed rgba(15, 122, 101, 0.12); 
+ 
+    border-radius: 1rem; 
+} 
+ 
+ 
+/* ========================= 
+   RESPONSIVE 
+   ========================= */ 
+ 
+@media (max-width: 1100px) { 
+    .map-grid { 
+        grid-template-columns: 1fr; 
+    } 
+ 
+    .map-panel { 
+        min-height: 60vh; 
+    } 
+ 
+    #map { 
+        min-height: calc(60vh - 1.8rem); 
+    } 
+ 
+    .distance-panel { 
+        min-height: auto; 
+    } 
+ 
+    .hos-distances-list { 
+        max-height: 400px; 
+    } 
+} 
+ 
+ 
+@media (max-width: 720px) { 
+    .map-panel, 
+    .distance-panel { 
+        border-radius: 1.3rem; 
+    } 
+ 
+    .map-panel { 
+        padding: 0.65rem; 
+ 
+        min-height: 52vh; 
+    } 
+ 
+    #map { 
+        min-height: calc(52vh - 1.3rem); 
+ 
+        border-radius: 0.95rem; 
+    } 
+ 
+    .distance-panel { 
+        padding: 1rem; 
+    } 
+ 
+    .hos-distances { 
+        padding: 0.9rem; 
+    } 
 }

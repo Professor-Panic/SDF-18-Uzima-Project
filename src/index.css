@@ -1,3 +1,10 @@
+/**
+ * index.css
+ *
+ * Legacy global styles were cleaned up here so they no longer conflict with the
+ * custom shell layout. This file keeps the general reset and base typography,
+ * while the custom navbar/sidebar styles live in the dedicated UI shell files.
+ */
 * {
     box-sizing: border-box;
 }
@@ -13,11 +20,11 @@ body,
 body {
     min-width: 320px;
     font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
-    color: #11211d;
+    color: #0a1a16;
     background:
-        radial-gradient(circle at top left, rgba(48, 153, 130, 0.14), transparent 36%),
-        radial-gradient(circle at top right, rgba(14, 109, 90, 0.12), transparent 30%),
-        linear-gradient(180deg, #f8fbfd 0%, #eef4f2 100%);
+        radial-gradient(circle at top left, rgba(48, 153, 130, 0.08), transparent 36%),
+        radial-gradient(circle at top right, rgba(14, 109, 90, 0.06), transparent 30%),
+        linear-gradient(180deg, #ffffff 0%, #f5f8f7 100%);
 }
 
 button,
@@ -42,20 +49,9 @@ button:hover {
     cursor: pointer;
 }
 
-.app-shell {
-    display: grid;
-    grid-template-columns: 300px minmax(0, 1fr);
-    min-height: 100vh;
-}
-
-.app-main {
-    padding: 1.6rem;
-    min-width: 0;
-}
-
 .route-page {
     display: grid;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 .route-page__hero {
@@ -65,10 +61,10 @@ button:hover {
     gap: 1rem;
     padding: 1.25rem 1.35rem;
     border-radius: 1.5rem;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(148, 163, 184, 0.14);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
-    backdrop-filter: blur(18px);
+    backdrop-filter: none;
 }
 
 .route-page__hero h1 {
@@ -76,6 +72,7 @@ button:hover {
     font-size: clamp(1.7rem, 2vw + 1rem, 3rem);
     line-height: 1.02;
     letter-spacing: -0.04em;
+    color: #0a1a16;
 }
 
 .route-page__status {
@@ -101,21 +98,22 @@ button:hover {
 .route-card {
     padding: 1.1rem;
     border-radius: 1.4rem;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(148, 163, 184, 0.14);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
-    backdrop-filter: blur(18px);
+    backdrop-filter: none;
 }
 
 .route-card h2 {
     margin: 0.15rem 0 0;
     font-size: 1.1rem;
     letter-spacing: -0.03em;
+    color: #0a1a16;
 }
 
 .route-card p {
     margin: 0.55rem 0 0;
-    color: #5d6e68;
+    color: #4a6a60;
     line-height: 1.55;
 }
 
@@ -125,7 +123,7 @@ button:hover {
     letter-spacing: 0.14em;
     font-size: 0.72rem;
     font-weight: 700;
-    color: #5e8579;
+    color: #4a7a6b;
 }
 
 .map-workspace {
@@ -143,10 +141,10 @@ button:hover {
     min-height: 72vh;
     padding: 0.9rem;
     border-radius: 1.6rem;
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(148, 163, 184, 0.14);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
-    backdrop-filter: blur(16px);
+    backdrop-filter: none;
 }
 
 .map-canvas {
@@ -163,16 +161,17 @@ button:hover {
     gap: 1rem;
     padding: 1.1rem;
     border-radius: 1.6rem;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(148, 163, 184, 0.14);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
-    backdrop-filter: blur(18px);
+    backdrop-filter: none;
 }
 
 .distance-panel__header h2 {
     margin: 0.15rem 0 0;
     font-size: 1.2rem;
     letter-spacing: -0.03em;
+    color: #0a1a16;
 }
 
 .distance-panel__eyebrow {
@@ -181,12 +180,12 @@ button:hover {
     letter-spacing: 0.14em;
     font-size: 0.72rem;
     font-weight: 700;
-    color: #5e8579;
+    color: #4a7a6b;
 }
 
 .distance-panel__copy {
     margin: 0.55rem 0 0;
-    color: #5d6e68;
+    color: #4a6a60;
     line-height: 1.55;
 }
 
@@ -205,8 +204,8 @@ button:hover {
     gap: 0.75rem;
     padding: 0.95rem 1rem;
     border-radius: 1.05rem;
-    background: rgba(15, 122, 101, 0.06);
-    border: 1px solid rgba(15, 122, 101, 0.1);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .hos-distances--empty {
@@ -216,12 +215,12 @@ button:hover {
 .hos-distances__name {
     margin: 0;
     font-weight: 700;
-    color: #11211d;
+    color: #0a1a16;
 }
 
 .hos-distances__meta {
     margin: 0.2rem 0 0;
-    color: #5d6e68;
+    color: #4a6a60;
     font-size: 0.92rem;
     line-height: 1.45;
 }
@@ -237,8 +236,8 @@ button:hover {
     margin: 0 0 1rem;
     padding: 0.9rem 1rem;
     border-radius: 1rem;
-    background: rgba(220, 38, 38, 0.08);
-    border: 1px solid rgba(220, 38, 38, 0.16);
+    background: rgba(220, 38, 38, 0.06);
+    border: 1px solid rgba(220, 38, 38, 0.12);
     color: #9f1239;
 }
 
@@ -250,10 +249,10 @@ button:hover {
     margin-bottom: 1.25rem;
     padding: 1.25rem 1.35rem;
     border-radius: 1.5rem;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(148, 163, 184, 0.14);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
-    backdrop-filter: blur(18px);
+    backdrop-filter: none;
 }
 
 .app-eyebrow {
@@ -262,7 +261,7 @@ button:hover {
     letter-spacing: 0.14em;
     font-size: 0.72rem;
     font-weight: 700;
-    color: #5e8579;
+    color: #4a7a6b;
 }
 
 .app-main__hero h1 {
@@ -271,18 +270,19 @@ button:hover {
     line-height: 1.02;
     letter-spacing: -0.04em;
     max-width: 16ch;
+    color: #0a1a16;
 }
 
 .app-subtitle {
     margin: 0.75rem 0 0;
     max-width: 56ch;
-    color: #5d6e68;
+    color: #4a6a60;
     line-height: 1.6;
 }
 
 .mental-health-page {
     display: grid;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 .mental-health-hero {
@@ -293,11 +293,15 @@ button:hover {
     padding: 1.25rem 1.35rem;
     border-radius: 1.5rem;
     background:
-        linear-gradient(135deg, rgba(15, 122, 101, 0.16), rgba(255, 255, 255, 0.82)),
-        rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(148, 163, 184, 0.14);
+        linear-gradient(135deg, rgba(15, 122, 101, 0.06), rgba(255, 255, 255, 0.95));
+    border: 1px solid rgba(255, 255, 255, 0.35);
     box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
-    backdrop-filter: blur(18px);
+    backdrop-filter: none;
+}
+
+.mental-health-hero__content {
+    flex: 1;
+    min-width: 0;
 }
 
 .mental-health-hero h1 {
@@ -305,6 +309,15 @@ button:hover {
     font-size: clamp(1.7rem, 2vw + 1rem, 3rem);
     line-height: 1.02;
     letter-spacing: -0.04em;
+    color: #0a1a16;
+}
+
+.mental-health-hero__subtitle {
+    margin: 0.55rem 0 0;
+    color: #4a6a60;
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 56ch;
 }
 
 .mental-health-hero__badge {
@@ -319,6 +332,7 @@ button:hover {
     color: #f6fffb;
     font-weight: 700;
     box-shadow: 0 16px 30px rgba(15, 122, 101, 0.24);
+    flex-shrink: 0;
 }
 
 .mental-health-layout {
@@ -331,10 +345,10 @@ button:hover {
 .mental-health-chat,
 .mental-health-card,
 .mental-health-crisis {
-    border: 1px solid rgba(148, 163, 184, 0.14);
-    background: rgba(255, 255, 255, 0.76);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.95);
     box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
-    backdrop-filter: blur(18px);
+    backdrop-filter: none;
 }
 
 .mental-health-chat {
@@ -355,6 +369,7 @@ button:hover {
     margin: 0.15rem 0 0;
     font-size: 1.2rem;
     letter-spacing: -0.03em;
+    color: #0a1a16;
 }
 
 .mental-health-eyebrow {
@@ -363,15 +378,15 @@ button:hover {
     letter-spacing: 0.14em;
     font-size: 0.72rem;
     font-weight: 700;
-    color: #5e8579;
+    color: #4a7a6b;
 }
 
 .mental-health-reset {
     flex: 0 0 auto;
     padding: 0.72rem 0.95rem;
     border-radius: 0.95rem;
-    border: 1px solid rgba(15, 122, 101, 0.15);
-    background: rgba(15, 122, 101, 0.08);
+    border: 1px solid rgba(15, 122, 101, 0.12);
+    background: rgba(255, 255, 255, 0.8);
     color: #0f5f4f;
     font-weight: 700;
 }
@@ -395,9 +410,10 @@ button:hover {
 
 .chat-bubble--bot {
     justify-self: flex-start;
-    background: rgba(15, 122, 101, 0.08);
-    color: #13302a;
+    background: rgba(255, 255, 255, 0.8);
+    color: #0a1a16;
     border-bottom-left-radius: 0.45rem;
+    border: 1px solid rgba(15, 122, 101, 0.06);
 }
 
 .chat-bubble--user {
@@ -408,17 +424,17 @@ button:hover {
 }
 
 .chat-bubble--crisis {
-    background: rgba(220, 38, 38, 0.1);
+    background: rgba(220, 38, 38, 0.06);
     color: #7f1d1d;
-    border: 1px solid rgba(220, 38, 38, 0.18);
+    border: 1px solid rgba(220, 38, 38, 0.12);
 }
 
 .chat-bubble--system,
 .chat-bubble--question,
 .chat-bubble--tip,
 .chat-bubble--intro {
-    background: rgba(15, 122, 101, 0.08);
-    color: #13302a;
+    background: rgba(255, 255, 255, 0.8);
+    color: #0a1a16;
 }
 
 .mental-health-crisis {
@@ -426,8 +442,8 @@ button:hover {
     gap: 0.7rem;
     padding: 1rem;
     border-radius: 1.2rem;
-    background: rgba(220, 38, 38, 0.08);
-    border-color: rgba(220, 38, 38, 0.16);
+    background: rgba(220, 38, 38, 0.06);
+    border-color: rgba(220, 38, 38, 0.12);
 }
 
 .mental-health-crisis__eyebrow,
@@ -457,9 +473,9 @@ button:hover {
     display: inline-flex;
     padding: 0.55rem 0.75rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.75);
-    border: 1px solid rgba(148, 163, 184, 0.12);
-    color: #27342f;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #0a1a16;
     line-height: 1.35;
 }
 
@@ -477,8 +493,8 @@ button:hover {
 .mental-health-chip {
     padding: 0.75rem 0.95rem;
     border-radius: 999px;
-    border: 1px solid rgba(15, 122, 101, 0.14);
-    background: rgba(15, 122, 101, 0.06);
+    border: 1px solid rgba(15, 122, 101, 0.12);
+    background: rgba(255, 255, 255, 0.8);
     color: #0f5f4f;
     font-weight: 700;
 }
@@ -493,9 +509,9 @@ button:hover {
     min-width: 0;
     padding: 0.95rem 1rem;
     border-radius: 1rem;
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    background: rgba(255, 255, 255, 0.92);
-    color: #11211d;
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    background: rgba(255, 255, 255, 1);
+    color: #0a1a16;
     outline: none;
 }
 
@@ -530,16 +546,17 @@ button:hover {
     margin: 0;
     font-size: 1.1rem;
     letter-spacing: -0.03em;
+    color: #0a1a16;
 }
 
 .mental-health-card p {
     margin: 0;
-    color: #5d6e68;
+    color: #4a6a60;
     line-height: 1.55;
 }
 
 .mental-health-card--support {
-    background: linear-gradient(180deg, rgba(15, 122, 101, 0.12), rgba(255, 255, 255, 0.78));
+    background: linear-gradient(180deg, rgba(15, 122, 101, 0.06), rgba(255, 255, 255, 0.95));
 }
 
 .mental-health-list {
@@ -569,160 +586,13 @@ button:hover {
     box-shadow: 0 16px 30px rgba(15, 122, 101, 0.24);
 }
 
-.sidebar-shell {
-    padding: 1rem;
-}
-
-.sidebar-shell__inner {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: calc(100vh - 2rem);
-    padding: 1.1rem;
-    border-radius: 1.8rem;
-    border: 1px solid rgba(148, 163, 184, 0.16);
-    background:
-        linear-gradient(180deg, rgba(8, 30, 27, 0.95) 0%, rgba(13, 41, 36, 0.94) 100%);
-    box-shadow: 0 26px 60px rgba(8, 30, 27, 0.18);
-    color: #dbe9e4;
-}
-
-.brand-block {
-    display: flex;
-    gap: 0.85rem;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding: 0.35rem 0.2rem 0.8rem;
-}
-
-.brand-block__icon {
-    display: grid;
-    place-items: center;
-    width: 2.7rem;
-    height: 2.7rem;
-    border-radius: 0.95rem;
-    background: linear-gradient(145deg, #1fd3a7, #0f7a65);
-    color: #effff9;
-    box-shadow: 0 12px 24px rgba(15, 122, 101, 0.32);
-}
-
-.brand-block h1 {
-    margin: 0;
-    font-size: 1.15rem;
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-}
-
-.brand-block p {
-    margin: 0.25rem 0 0;
-    color: rgba(219, 233, 228, 0.7);
-    font-size: 0.9rem;
-}
-
-.sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-}
-
-.sidebar-nav__item {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    width: 100%;
-    padding: 0.88rem 0.95rem;
-    border-radius: 1rem;
-    color: rgba(219, 233, 228, 0.82);
-    text-align: left;
-    text-decoration: none;
-    transition: transform 160ms ease, background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
-}
-
-.sidebar-nav__item:hover {
-    background: rgba(255, 255, 255, 0.06);
-    transform: translateX(2px);
-}
-
-.sidebar-nav__item.is-active {
-    background: linear-gradient(135deg, rgba(31, 211, 167, 0.18), rgba(20, 144, 111, 0.3));
-    color: #f3fffb;
-    box-shadow: inset 0 0 0 1px rgba(112, 243, 202, 0.18);
-}
-
-.sidebar-nav__icon {
-    display: grid;
-    place-items: center;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 0.8rem;
-    background: rgba(255, 255, 255, 0.06);
-    color: inherit;
-    flex: 0 0 auto;
-}
-
-.sidebar-footer {
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-    padding-top: 1rem;
-}
-
-.sidebar-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.65rem;
-    width: 100%;
-    padding: 0.95rem 1rem;
-    border-radius: 1rem;
-    background: linear-gradient(135deg, #1fd3a7, #0f7a65);
-    color: white;
-    font-weight: 700;
-    box-shadow: 0 18px 30px rgba(15, 122, 101, 0.28);
-}
-
-.sidebar-utility-links {
-    display: grid;
-    gap: 0.35rem;
-}
-
-.sidebar-utility-link {
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    width: 100%;
-    padding: 0.82rem 0.9rem;
-    border-radius: 0.95rem;
-    color: rgba(219, 233, 228, 0.8);
-    text-decoration: none;
-    transition: background-color 160ms ease, color 160ms ease;
-    text-align: left;
-}
-
-.sidebar-utility-link:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: #ffffff;
-}
-
 @media (max-width: 1100px) {
-    .app-shell {
-        grid-template-columns: 1fr;
-    }
-
     .route-page__grid {
         grid-template-columns: 1fr;
     }
 
     .map-grid {
         grid-template-columns: 1fr;
-    }
-
-    .sidebar-shell {
-        padding-bottom: 0;
-    }
-
-    .sidebar-shell__inner {
-        min-height: auto;
     }
 
     .app-main__hero {
@@ -737,6 +607,16 @@ button:hover {
     .route-page__hero {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .mental-health-hero {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .mental-health-hero__badge {
+        min-width: 0;
+        width: 100%;
     }
 
     .app-hero__chip {
@@ -764,15 +644,6 @@ button:hover {
 }
 
 @media (max-width: 720px) {
-    .app-main {
-        padding: 1rem;
-    }
-
-    .sidebar-shell {
-        padding: 0.75rem;
-    }
-
-    .sidebar-shell__inner,
     .app-main__hero,
     .route-page__hero,
     .route-card {
